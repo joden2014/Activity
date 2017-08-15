@@ -1,78 +1,51 @@
 <template>
     <div v-if="!show" v-bind:class="{hasBottom:hasBottom}">
-      <MyHeader :MyTitle='res.Data.PromotionName'></MyHeader>
-
+      <x-header :left-options="{backText: ''}" style="background-color:#CC1B23;" v-if="IsH5">{{res.Data.PromotionName}}<a slot="right" href="http://m.qipeilong.net/ShoppingCart/Index?p=1" id="shopCartNum"></a></x-header>
       <div v-for="item in res.Data.StructItems" class="floor" :class="'floor'+item.IID" :key="item.IID" ref="myFloor">
 
 
         <!-- 轮播类型 -->
-        <div v-if="item.ContentType==='1'">
-          <swiperHtml :IData="item.Items"></swiperHtml>
-        </div>
+          <swiperHtml :IData="item.Items" v-if="item.ContentType==='1'"></swiperHtml>
 
         <!-- 图片类型 -->
-        <div v-else-if="item.ContentType==='2'">
-          <Images :ImgData="item.Items"></Images>
-        </div>
+          <Images :ImgData="item.Items" v-else-if="item.ContentType==='2'"></Images>
 
         <!-- 商品列表类型 -->
-        <div v-else-if="item.ContentType==='3'">
-          <productList :IData="item.Items[0]"></productList>
-        </div>
+          <productList :IData="item.Items[0]" v-else-if="item.ContentType==='3'"></productList>
 
         <!-- 商品单品类型 -->
-        <div v-else-if="item.ContentType==='4'">
-          <product :IData="item"></product>
-        </div>
+          <product :IData="item" v-else-if="item.ContentType==='4'"></product>
 
         <!-- 锚点导航 -->
-        <div v-else-if="item.ContentType==='6'" ref="nav">
-          <swiperNav :IData="item" style="background:#fff"></swiperNav>
-        </div>
+          <swiperNav :IData="item" style="background:#fff" v-else-if="item.ContentType==='6'" ref="nav"></swiperNav>
 
         <!-- tab切换 -->
-        <div v-else-if="item.ContentType==='7'" ref="tab">
-          <Tab :IData="item"></Tab>
-        </div>
+          <Tab :IData="item" v-else-if="item.ContentType==='7'" ref="tab"></Tab>
 
         <!-- 底部导航 -->
-        <div v-else-if="item.ContentType==='5'">
-          <bottomNav :IData="item"></bottomNav>
-        </div>
+          <bottomNav :IData="item" v-else-if="item.ContentType==='5'"></bottomNav>
 
         <!-- 引用模板 -->
         <div v-else-if="item.ContentType==='8'" class="MyModule">
           <div class="ModuleCon" v-for="(modules,index) in moduleLsit">
             <div v-for="modulesItem in modules.Data" class="Module" :class="'Module'+modulesItem.IID" :key="modulesItem.IID" ref="myModule">
                 <!-- 轮播类型 -->
-                <div v-if="modulesItem.ContentType==='1'">
-                  <swiperHtml :IData="modulesItem.Items"></swiperHtml>
-                </div>
+                  <swiperHtml :IData="modulesItem.Items" v-if="modulesItem.ContentType==='1'"></swiperHtml>
 
                 <!-- 图片类型 -->
-                <div v-else-if="modulesItem.ContentType==='2'">
-                  <Images :ImgData="modulesItem.Items"></Images>
-                </div>
+                  <Images :ImgData="modulesItem.Items" v-else-if="modulesItem.ContentType==='2'"></Images>
 
                 <!-- 商品列表类型 -->
-                <div v-else-if="modulesItem.ContentType==='3'">
-                  <productList :IData="modulesItem.Items[0]"></productList>
-                </div>
+                  <productList :IData="modulesItem.Items[0]" v-else-if="modulesItem.ContentType==='3'"></productList>
 
                 <!-- 商品单品类型 -->
-                <div v-else-if="modulesItem.ContentType==='4'">
-                  <product :IData="modulesItem"></product>
-                </div>
+                  <product :IData="modulesItem" v-else-if="modulesItem.ContentType==='4'"></product>
 
                 <!-- 锚点导航 -->
-                <div v-else-if="modulesItem.ContentType==='6'" ref="nav">
-                  <swiperNav :IData="modulesItem"></swiperNav>
-                </div>
+                  <swiperNav :IData="modulesItem" v-else-if="modulesItem.ContentType==='6'" ref="nav"></swiperNav>
 
                 <!-- tab切换 -->
-                <div v-else-if="modulesItem.ContentType==='7'" ref="tab">
-                  <Tab :IData="modulesItem"></Tab>
-                </div>
+                  <Tab :IData="modulesItem" v-else-if="modulesItem.ContentType==='7'" ref="tab"></Tab>
             </div>
           </div>
 
@@ -84,7 +57,7 @@
 
 <script>
 import header from '../../components/header'
-import { Group, Cell } from 'vux'
+import { Group, Cell, XHeader } from 'vux'
 import swiperHtml from './swiper.vue'
 import Images from './images.vue'
 import productList from './productList.vue'
@@ -94,6 +67,7 @@ import bottomNav from './bottomNav.vue'
 import Tab from './Tab.vue'
 import tools from '../../assets/tools'
 import { SetAppData, browser, StringToJson } from '../../assets/App'
+import { SetApp } from '../../assets/userInfo'
 export default {
   data: () => {
     return {
@@ -101,7 +75,8 @@ export default {
       show: true,
       url: 'http://m.qipeilong.net/Promotion/GetPromotionModelInfoByID',
       hasBottom: false,
-      moduleLsit: []
+      moduleLsit: [],
+      IsH5: false
     }
   },
   components: {
@@ -114,7 +89,8 @@ export default {
     product,
     swiperNav,
     bottomNav,
-    Tab
+    Tab,
+    XHeader
   },
   mounted () {
     let that = this
@@ -125,8 +101,22 @@ export default {
         title: '获取活动框架',
         dataObj: parms,
         api: 'Promotion/GetPromotionModelInfoByID',
-        noDomain: false
+        noDomain: false,
+        callBack: 'CallBackData'
       })
+
+      window.CallBackData = (res) => {
+        let promise = new Promise((resolve, reject) => {
+          resolve(res)
+        })
+        promise.then((res) => {
+          that.DrawModule(StringToJson(res))
+          SetApp(StringToJson(res).Data.PromotionName)
+        }).catch((e) => {
+          console.log(e)
+        })
+        tools.loading('close')
+      }
       return false
     }
     this.$ajax({
@@ -136,7 +126,52 @@ export default {
       load: false,
       showMsg: true
     }).then((value) => {
+      that.IsH5 = true
+      that.DrawModule(value)
+    })
+  },
+  methods: {
+    GetModule (id) {
+      let that = this
+      let parms = { id: id, ver: '1.0', platform: 1 }
+      if (browser.versions().IosApp || browser.versions().AndroidApp) {
+        tools.loading('open')
+        SetAppData({
+          title: '获取模板数据',
+          dataObj: parms,
+          api: 'Promotion/GetPromotionStructModelListByPromotionID',
+          noDomain: false,
+          callBack: 'CallBackGetModuleData'
+        })
+        window.CallBackGetModuleData = (res) => {
+          let promise = new Promise((resolve, reject) => {
+            resolve(res)
+          })
+          promise.then((res) => {
+            that.moduleLsit.push(res)
+          }).catch((e) => {
+            console.log(e)
+          })
+          tools.loading('close')
+        }
+        return false
+      }
+      this.$ajax({
+        url: 'http://m.qipeilong.net/Promotion/GetPromotionStructModelListByPromotionID',
+        data: parms,
+        method: 'POST',
+        load: false,
+        showMsg: true
+      }).then((value) => {
+        if (value.Success) {
+          that.moduleLsit.push(value)
+        }
+      })
+    },
+    DrawModule (value) {
+      let that = this
       if (value.Success) {
+        document.title = value.Data.PromotionName
         that.res = value
         that.show = false
         for (let i = 0; i < value.Data.StructItems.length; i++) {
@@ -158,42 +193,13 @@ export default {
           }
         })
       }
+    }
+  },
+  updated () {
+    tools.Success({
+      'success': true,
+      'text': ''
     })
-  },
-  methods: {
-    GetModule (id) {
-      let that = this
-      this.$ajax({
-        url: 'http://m.qipeilong.net/Promotion/GetPromotionStructModelListByPromotionID',
-        data: { id: id, ver: '1.0', platform: 1, userId: 'b11dfe19ef4d4f60860dda673dfa7863' },
-        method: 'POST',
-        load: false,
-        showMsg: true
-      }).then((value) => {
-        if (value.Success) {
-          that.moduleLsit.push(value)
-        }
-      })
-    }
-  },
-  beforeCreate () {
-    let that = this
-    window.CallBackData = (res) => {
-      let promise = new Promise((resolve, reject) => {
-        resolve(res)
-      })
-      promise.then((res) => {
-        that.res = StringToJson(res)
-        tools.msg({
-          text: res.ErrorMsg,
-          position: 'center',
-          time: 1000
-        })
-      }).catch((e) => {
-        console.log(e)
-      })
-      tools.loading('close')
-    }
   }
 }
 </script>

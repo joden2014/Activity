@@ -4,6 +4,18 @@
 		<div class="productCon" v-for="list in IData.Items" v-bind:class="{ flex2: IData.StructID===4 || IData.StructID===2,flex1: IData.StructID===1,flex3: IData.StructID===3 }">
 	        <div class="item" v-for="product in list.ContentObj.ProductItems" :key="product.IID">
 	    		<div class="ProductImg">
+	    			<i 
+	    			class="icon" 
+	    			v-if="product.IconUrl" 
+	    			v-bind:class="{
+	    				iconLT: product.IconPosition === '1',
+          				iconRT: product.IconPosition === '2',
+          				iconLB: product.IconPosition === '3',
+          				iconRB: product.IconPosition === '4',
+          				iconC: product.IconPosition === '5'
+          				}">
+          			<img :src="product.IconUrl" v-bind:style="{opacity:product.IconTrsp}">
+          			</i>
 	    			<x-img :src="product.ProductImages.split(',')[0]" :webp-src="`${product.ProductImages.split(',')[0]}`" @on-success="success" @on-error="error" class="ximg-demo" error-class="ximg-error" container="#app"></x-img>
 	    		</div>
 	    		<div>
@@ -23,10 +35,10 @@
 		    		</div>
 					<div v-bind:class="{ flex:IData.StructID===1 }">
 			    		<div class="ProductPrice">
-			    			<span>￥<em>{{product.ListPriceStr}}</em><i v-if="product.CouponID!==null" class="coupons" @click="operation(4,{'CouponID': product.CouponID, 'CouponType': product.CouponType})">券</i></span>
+			    			<span>￥<em>{{product.ListPriceStr}}</em><i v-if="product.CouponID!==null && product.ListPriceStr!=='认证会员可见'" class="coupons" @click="operation(4,{'CouponID': product.CouponID, 'CouponType': product.CouponType})">券</i></span>
 			    		</div>
 			    		<div class="ProductBtn">
-			    			<button @click="operation(5,{'UserProductId': product.UserProductId, 'ProductType': product.ProductType})">马上抢</button>
+			    			<button @click="operation(5,{'UserProductId': product.ProductType==1?product.PromotionId:product.UserProductId, 'ProductType': product.ProductType})">马上抢</button>
 			    		</div>
 		    		</div>
 	    		</div>
@@ -69,6 +81,7 @@
 .coupons{
   background:rgba(248,170,51,0.35);
   border:1px solid #fc6b3e;
+  margin-left:0.2rem;
 }
 .flex{
 	display:flex;
@@ -136,8 +149,40 @@
 		.ProductImg{
 			text-align: center;
 			padding:0.3rem 0;
+			position: relative;
+			i{
+				position:absolute;
+				width:1.749rem;
+				height:1.479rem;
+				img{
+                   width:100%;
+                   height:100%;
+				}
+			}
+			.iconLT{
+				top: 0;
+				left:0;
+			}
+			.iconRT{
+				top: 0;
+				right:0;
+			}
+			.iconLB{
+				bottom: 0;
+				left:0;
+			}
+			.iconRB{
+				bottom: 0;
+				right:0;
+			}
+			.iconC{
+				top:50%;
+				left:50%;
+				transform:translate(-50%,-50%);
+			}
 			img{
 				width:3.754rem;
+				height:3.753rem;
 				display:inline-block;
 			}
 		}

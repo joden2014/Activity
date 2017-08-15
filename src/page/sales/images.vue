@@ -1,9 +1,7 @@
 <template>
 	<div class="ImgsList">
 		<div v-for="Img in ImgData" :key="Img.IID" v-bind:style="{width:Img.ImgWidth+'%'}" @click="operation(Img.ContentObj.OperationType,Img.ContentObj.ContentValue)">
-          <span>
             <x-img :src="Img.ContentObj.ImgUrl1" :webp-src="`${Img.ContentObj.ImgUrl1}`" @on-success="success" @on-error="error" class="ximg-demo" error-class="ximg-error" container="#app"></x-img>
-          </span>
         </div>
 	</div>
 </template>

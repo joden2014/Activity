@@ -28,10 +28,12 @@ export const StringToJson = (str) => {
   } else {
     obj = str
   }
-  if (obj.Success === 1) {
-    obj.Success = true
-  } else {
-    obj.Success = false
+  if (browser.versions().IosApp) {
+    if (obj.Success === 1) {
+      obj.Success = true
+    } else {
+      obj.Success = false
+    }
   }
   return obj
 }
@@ -64,8 +66,8 @@ export const BackApp = () => {
 }
 
 export const SetAppData = (obj) => {
-  let { title, dataObj, api, noDomain = true } = obj
-  dataObj.h5apicallback = 'CallBackData'
+  let { title, dataObj, api, noDomain = true, callBack } = obj
+  dataObj.h5apicallback = callBack
   dataObj.h5apiname = api
   let domain = ''
   if (noDomain) {

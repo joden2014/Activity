@@ -1,3 +1,7 @@
+body{
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+}
 .coupons{
   background:rgba(248,170,51,0.35);
   border:1px dashed #fc6b3e;
@@ -112,3 +116,77 @@
   left:50%;
   transform:translate(-50%,-50%);
 }
+
+  #shopCartNum{
+    background: url(https://test.tuhu.org/h5image/whiteList.png) no-repeat;
+    background-size: 1.3rem;
+    width: 1.3rem;
+    height: 1.3rem;
+    i{
+      font-size: .6rem;
+      width: 0.7rem;
+      height: 0.9rem;
+      line-height: 0.9rem;
+      background-color: #fff;
+      color: #cc1b23;
+      border-radius: 50%;
+      display: block;
+      position: absolute;
+      right: -.2rem;
+      top: -.1rem;
+      text-align: center;
+      z-index: 10;
+      padding: 0 .1rem;
+      font-style:normal;
+    }
+  }
+
+  #Model{
+    position:fixed;
+    font-size:0.6rem;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: rgba(0,0,0,0.6);
+    z-index:1990;
+    .ModelContent{
+      width:90%;
+      max-height: 400px;
+      background:#fff;
+      position:absolute;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      border-radius:0.3rem;
+      .ModelBody{
+        overflow: auto;
+        max-height:340px;
+        margin: 10px;
+        li{
+            margin-left: 10px;
+            list-style-type: disc;
+            list-style-position: outside;
+        }
+      }
+      .ModelHead{
+        height:40px;
+        text-align:center;
+        line-height:40px;
+        position:relative;
+        .closeBox {
+            position: absolute;
+            top: .5rem;
+            right: .5rem;
+            background: url(https://test.tuhu.org/oldupload/16823032-c27d-4b38-a51b-005d67862d01.png) no-repeat;
+            width: .8rem;
+            height: .8rem;
+            background-size: 100% 100%;
+        }
+      }
+    }
+  }
+
+  .swiper-pagination{
+    height:10px;
+  }

@@ -6,11 +6,13 @@
 import axios from 'axios'
 import qs from 'qs'
 import tools from '../assets/tools'
+import userInfo from '../assets/userInfo'
 const AjaxData = (obj) => {
   let { url, data = { }, method, load, showMsg = true } = obj
   if (load) {
     tools.loading('open')
   }
+  data.userId = userInfo.userId
   return new Promise((resolve, reject) => {
     axios({
       method: method || `POST`,

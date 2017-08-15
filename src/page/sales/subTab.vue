@@ -7,29 +7,20 @@
         <load-more :tip="tips" :show-loading="IsLoding" v-show="!IsLoding"></load-more>
         <div v-for="item in res.Data" class="TabCon" :class="'TabCon'+item.IID" :key="item.IID" ref="myTabCon">
           <!-- 轮播类型 -->
-          <div v-if="item.ContentType==='1'">
-            <swiperHtml :IData="item.Items"></swiperHtml>
-          </div>
+  
+            <swiperHtml :IData="item.Items" v-if="item.ContentType==='1'"></swiperHtml>
 
           <!-- 图片类型 -->
-          <div v-else-if="item.ContentType==='2'">
-            <Images :ImgData="item.Items"></Images>
-          </div>
+            <Images :ImgData="item.Items" v-else-if="item.ContentType==='2'"></Images>
 
           <!-- 商品单品类型 -->
-          <div v-else-if="item.ContentType==='4'">
-            <product :IData="item"></product>
-          </div>
+            <product :IData="item" v-else-if="item.ContentType==='4'"></product>
 
           <!-- 锚点导航 -->
-          <div v-else-if="item.ContentType==='6'" ref="nav">
-            <swiperNav :IData="item" style="background:#000"></swiperNav>
-          </div>
+            <swiperNav :IData="item" style="background:#000" v-else-if="item.ContentType==='6'" ref="nav"></swiperNav>
 
           <!-- 底部导航 -->
-          <div v-else-if="item.ContentType==='5'">
-            <bottomNav :IData="item"></bottomNav>
-          </div>
+            <bottomNav :IData="item" v-else-if="item.ContentType==='5'"></bottomNav>
 
           <!-- 引用模板 -->
           <div v-else-if="item.ContentType==='8'">
@@ -37,19 +28,11 @@
           </div>
 
           <!-- 商品列表类型 -->
-          <div v-else-if="item.ContentType==='3'">
-            <productList :IData="item.Items[0]"></productList>
-          </div>
+            <productList :IData="item.Items[0]" v-else-if="item.ContentType==='3'"></productList>
         </div>
-
-      <div class="product" v-if="hasList">
         <!-- 商品列表类型 -->
+        <productList :IData="list" class="product" v-if="hasList"></productList>
         
-        <productList :IData="list"></productList>
-        
-      </div>
-
-
 	    </div>
     </div>
 </template>

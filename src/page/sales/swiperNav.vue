@@ -1,23 +1,27 @@
 <template>
-  <div>
-    <div  class="swiperBox">
+  <div style="height:44px;">
+  <sticky ref="sticky" :offset="0" :check-sticky-support="false">
+    <div class="swiperBox">
       <swiper :options="swiperOption" class="swiperNav" ref="mySwiper">
-        <swiper-slide v-for="(nav,index) in IData.Items[0].ContentObj.ContentValue" class="item" v-bind:class="{flex4:IData.Items[0].ContentObj.ContentValue.length===4,flex3:IData.Items[0].ContentObj.ContentValue.length===3,flex2:IData.Items[0].ContentObj.ContentValue.length===2,flex1:IData.Items[0].ContentObj.ContentValue.length===1,active:active===index}" :key="nav.AnchorID" @click.native="goAnchor('.floor'+nav.AnchorID,index)" v-bind:style="{backgroundColor:active===index?IData.Items[0].ContentObj.BgColor2:IData.Items[0].ContentObj.BgColor1,color:active===index?IData.Items[0].ContentObj.FontColor2:IData.Items[0].ContentObj.FontColor1 }">
+        <swiper-slide v-for="(nav,index) in IData.Items[0].ContentObj.ContentValue" class="item" v-bind:class="{flex4:IData.Items[0].ContentObj.ContentValue.length===4,flex3:IData.Items[0].ContentObj.ContentValue.length===3,flex2:IData.Items[0].ContentObj.ContentValue.length===2,flex1:IData.Items[0].ContentObj.ContentValue.length===1,active:active===index}" :key="nav.AnchorID" @click.native="goAnchor('.floor'+nav.AnchorID,index)" v-bind:style="{backgroundColor:active===index?IData.Items[0].ContentObj.BgColor1:IData.Items[0].ContentObj.BgColor2,color:active===index?IData.Items[0].ContentObj.FontColor1:IData.Items[0].ContentObj.FontColor2 }">
           <span>{{nav.Title}}</span>
         </swiper-slide>
       </swiper>
       <span v-show="IData.Items[0].ContentObj.ContentValue > 4"></span>
     </div>
+    </sticky>
   </div>
 </template>
 
 <script>
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
+  import { Sticky } from 'vux'
   import jump from '../../assets/jump.js'
   export default {
     components: {
       swiper,
-      swiperSlide
+      swiperSlide,
+      Sticky
     },
     data () {
       return {
@@ -46,7 +50,6 @@
         console.log(e)
       },
       goAnchor: (selector, index) => {
-        console.log(selector)
         this.active = index
         let jump = document.querySelectorAll(selector)
         let total = jump[0].offsetTop
@@ -97,7 +100,7 @@
     },
     mounted () {
       this.$nextTick(function () {
-        window.addEventListener('scroll', this.onScroll)
+        // window.addEventListener('scroll', this.onScroll)
       })
     },
     props: ['IData']
@@ -120,6 +123,13 @@
       word-wrap:break-word;
       font-size: 0.60rem;
       line-height:2rem;
+  }
+  .fixed{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1990;
+    width:100%;
   }
   .flex1{
     width: 100%;

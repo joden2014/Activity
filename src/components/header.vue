@@ -3,7 +3,7 @@
 		<header :style="{background:bgcolor}">
 			<div>
 				<a class="left iconfont icon-fanhui" @click="back"></a>
-				<span>{{MyTitle}}</span>
+				<span id="title">{{MyTitle}}</span>
 			</div>
 		</header>
 	</div>

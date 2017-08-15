@@ -1,8 +1,8 @@
 <template>
   <div class="swiperBox" ref="swipers">
    <swiper :options="InitSwiper"  ref="mySwiper">
-    <swiper-slide v-for="item in IData[0].ContentObj.ImgItems" :key="item.IID">
-    <span @click="operation(item.OperationType,item.ContentValue)"><img :src="item.ImgUrl1"></span>
+    <swiper-slide v-for="item in IData[0].ContentObj.ImgItems" :key="item.IID"  @click.native="operation(item.OperationType,item.ContentValue)">
+    <span><img :src="item.ImgUrl1"></span>
     </swiper-slide>
    </swiper>
    <div class="swiper-pagination swiper-pagination-bullets"></div>

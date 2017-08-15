@@ -17,5 +17,12 @@ export default {
 body {
   background-color: #e62c35;
 }
-
+#app{
+	-webkit-overflow-scrolling: touch;
+	overflow: auto;
+	box-sizing: border-box;
+}
+  .vux-header-right{
+    position:static;
+  }
 </style>

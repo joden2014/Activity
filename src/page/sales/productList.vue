@@ -1,12 +1,24 @@
 <!-- 商品组组件 -->
 <template>
 <div>
-	<div class="productList">
+	<div class="productList" v-if="IData.ContentType === 3">
 		<swiper :options="swiperOption" class="productSwiper" v-if="IData.ContentObj.DataFiltering === 0" ref="mySwiper">
 	        <swiper-slide v-for="product in IData.ContentObj.ProductItems" class="item" :key="product.IID">
 	        	<div>
 	        		<div class="ProductImg">
-	        			<img :data-src="product.ProductImages.split(',')[0]" class="swiper-lazy" :src="qplIcon">
+		        		<i 
+		    			class="icon" 
+		    			v-if="product.IconUrl" 
+		    			v-bind:class="{
+		    				iconLT: product.IconPosition === '1',
+	          				iconRT: product.IconPosition === '2',
+	          				iconLB: product.IconPosition === '3',
+	          				iconRB: product.IconPosition === '4',
+	          				iconC: product.IconPosition === '5'
+	          				}">
+	          			<img :src="product.IconUrl" v-bind:style="{opacity:product.IconTrsp}">
+	          			</i>
+	        			<img :src="product.ProductImages.split(',')[0]">
 	        		</div>
 	        		<div class="ProductNum">
 	        			<span v-if="product.LimitMin>0">起购:{{product.LimitMin}}</span>
@@ -17,10 +29,10 @@
 	        			<span>{{product.ProductName}}</span>
 	        		</div>
 	        		<div class="ProductPrice">
-	        			<span>￥<em>{{product.ListPriceStr}}</em><i v-if="product.CouponID!==null" class="coupons" @click="operation(4,{'CouponID': product.CouponID, 'CouponType': product.CouponType})">券</i></span>
+	        			<span>￥<em>{{product.ListPriceStr}}</em><i v-if="product.CouponID!==null && product.ListPriceStr!=='认证会员可见'" class="coupons" @click="operation(4,{'CouponID': product.CouponID, 'CouponType': product.CouponType})">券</i></span>
 	        		</div>
 	        		<div class="ProductBtn">
-	        			<button @click="operation(5,{'UserProductId': product.UserProductId, 'ProductType': product.ProductType})">马上抢</button>
+	        			<button @click="operation(5,{'UserProductId':product.ProductType==1?product.PromotionId:product.UserProductId, 'ProductType': product.ProductType})">马上抢</button>
 	        		</div>
 	        	</div>
 	        </swiper-slide>
@@ -30,6 +42,18 @@
 	    <div class="productCon flex" v-else-if="IData.ContentObj.DataFiltering === 2">
 	        <div class="item flex2" v-for="product in IData.ContentObj.ProductItems" :key="product.IID">
 					<div class="ProductImg">
+						<i 
+		    			class="icon" 
+		    			v-if="product.IconUrl" 
+		    			v-bind:class="{
+		    				iconLT: product.IconPosition === '1',
+	          				iconRT: product.IconPosition === '2',
+	          				iconLB: product.IconPosition === '3',
+	          				iconRB: product.IconPosition === '4',
+	          				iconC: product.IconPosition === '5'
+	          				}">
+	          			<img :src="product.IconUrl" v-bind:style="{opacity:product.IconTrsp}">
+	          			</i>
 	        			<x-img :src="product.ProductImages.split(',')[0]" :webp-src="`${product.ProductImages.split(',')[0]}`" @on-success="success" @on-error="error" class="ximg-demo" error-class="ximg-error" container="#app"></x-img>
 	        		</div>
 	        		<div class="ProductNum">
@@ -41,10 +65,10 @@
 	        			<span>{{product.ProductName}}</span>
 	        		</div>
 	        		<div class="ProductPrice">
-	        			<span>￥<em>{{product.ListPriceStr}}</em><i v-if="product.CouponID!==null" class="coupons" @click="operation(4,{CouponID: product.CouponID,CouponType: product.CouponType})">券</i></span>
+	        			<span>￥<em>{{product.ListPriceStr}}</em><i v-if="product.CouponID!==null && product.ListPriceStr!=='认证会员可见'" class="coupons" @click="operation(4,{CouponID: product.CouponID,CouponType: product.CouponType})">券</i></span>
 	        		</div>
 	        		<div class="ProductBtn">
-	        			<button @click="operation(5,{'UserProductId': product.UserProductId, 'ProductType': product.ProductType})">马上抢</button>
+	        			<button @click="operation(5,{'UserProductId':product.ProductType==1?product.PromotionId:product.UserProductId, 'ProductType': product.ProductType})">马上抢</button>
 	        		</div>
 	        </div>
         </div>
@@ -72,9 +96,6 @@
           centeredSlides: false,
           spaceBetween: 5,
           grabCursor: true,
-          lazyLoading: true,
-          lazyLoadingInPrevNext: true,
-          lazyLoadingInPrevNextAmount: 3,
           notNextTick: true
         },
         qplIcon: qplIcon
@@ -97,13 +118,18 @@
       }
     },
     mounted () {
+      // console.log(this.IData)
     },
     props: ['IData']
   }
 </script>
 
 <style lang="less" scoped>
-
+.coupons{
+  background:rgba(248,170,51,0.35);
+  border:1px solid #fc6b3e;
+  margin-left:0.2rem;
+}
 	.productList{
 		margin: 0.3rem 0;
 		.productSwiper{
@@ -137,6 +163,37 @@
 		.ProductImg{
 			text-align: center;
 			padding:0.3rem 0;
+			position:relative;
+			i{
+				position:absolute;
+				width:1.749rem;
+				height:1.479rem;
+				img{
+                   width:100%;
+                   height:100%;
+				}
+			}
+			.iconLT{
+				top: 0;
+				left:0;
+			}
+			.iconRT{
+				top: 0;
+				right:0;
+			}
+			.iconLB{
+				bottom: 0;
+				left:0;
+			}
+			.iconRB{
+				bottom: 0;
+				right:0;
+			}
+			.iconC{
+				top:50%;
+				left:50%;
+				transform:translate(-50%,-50%);
+			}
 			img{
 				width:3.754rem;
 				height:3.754rem;
