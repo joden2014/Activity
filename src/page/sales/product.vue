@@ -3,7 +3,7 @@
 	<div class="productList">
 		<div class="productCon" v-for="list in IData.Items" v-bind:class="{ flex2: IData.StructID===4 || IData.StructID===2,flex1: IData.StructID===1,flex3: IData.StructID===3 }">
 	        <div class="item" v-for="product in list.ContentObj.ProductItems" :key="product.IID">
-	    		<div class="ProductImg">
+	    		<div class="ProductImg" @click="operation(2,{'UserProductID': product.UserProductId, 'ContentType': 2})">
 	    			<i 
 	    			class="icon" 
 	    			v-if="product.IconUrl" 
@@ -24,7 +24,7 @@
 		    			<span v-if="product.LimitMax>0">限购:{{product.LimitMax}}</span>
 		    			<span>库存:{{product.CurrentAmount}}</span>
 		    		</div>
-		    		<div class="ProductTitle">
+		    		<div class="ProductTitle" @click="operation(2,{'UserProductId': product.UserProductId, 'ContentType': 2})">
 		    			<span>{{product.ProductName}}</span>
 		    		</div>
 

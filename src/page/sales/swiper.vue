@@ -2,7 +2,7 @@
   <div class="swiperBox" ref="swipers">
    <swiper :options="InitSwiper"  ref="mySwiper">
     <swiper-slide v-for="item in IData[0].ContentObj.ImgItems" :key="item.IID"  @click.native="operation(item.OperationType,item.ContentValue)">
-    <span><img :src="item.ImgUrl1"></span>
+    <span><img :src="GetImgUrl(item.ImgUrl1,IData[0].ContentObj)"></span>
     </swiper-slide>
    </swiper>
    <div class="swiper-pagination swiper-pagination-bullets"></div>
@@ -12,6 +12,7 @@
 <script>
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import jump from '../../assets/jump.js'
+  import tools from '../../assets/tools'
   export default {
     components: {
       swiper,
@@ -87,6 +88,44 @@
     methods: {
       operation: (type, value) => {
         jump.to(type, value)
+      },
+      GetImgUrl: (url, style) => {
+        let type = style.GroupStyle
+        let col = 1
+        switch (type) {
+          case 1: {
+            col = 1
+            break
+          }
+          case 2: {
+            col = 2
+            break
+          }
+          case 3: {
+            col = 2
+            break
+          }
+          case 4: {
+            col = 2
+            break
+          }
+          case 5: {
+            col = 3
+            break
+          }
+          case 6: {
+            col = 2
+            break
+          }
+          case 7: {
+            col = 3
+            break
+          }
+          default: {
+            col = 1
+          }
+        }
+        return tools.ImagesUrl(url, col, 1)
       }
     },
     mounted () {

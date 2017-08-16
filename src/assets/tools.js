@@ -70,13 +70,13 @@ const tools = {
       tools.msg({
         text: text,
         position: 'center',
-        time: 1000
+        time: 3000
       })
     } else {
       tools.msg({
         text: text,
         position: 'center',
-        time: 1000
+        time: 5000
       })
     }
   },
@@ -88,7 +88,37 @@ const tools = {
     node.innerHTML = Model
     body.appendChild(node)
     CloseModel()
+  },
+  ImagesUrl: (url, columns, bigger) => {
+    let arr = url.match(/_w(\d+)_h(\d+)/)
+    if (!arr) {
+      arr = url.match(/w(\d+)_h(\d+)/)
+    }
+    if (!arr) {
+      return
+    }
+    this.bigger = bigger
+    this.width = arr[1] - 0
+    this.height = arr[2] - 0
+    this.columns = columns
+    let imgW = parseInt(window.innerWidth / this.columns, 10)
+    let imgH = parseInt((this.height / this.width) * imgW, 10)
+    const height = Math.ceil(imgH * this.bigger / 10) * 10
+    if (location.href.indexOf('http://localhost:8080') > -1) {
+      return replaceCdn(url.replace(/\?.*?99/, `?imageView2/2/interlace/1/q/99/h/${height}`))
+    } else {
+      return url
+    }
+  },
+  GetImageHeight: () => {
+    let imgW = parseInt(window.innerWidth / this.columns, 10)
+    console.log(parseInt((this.height / this.width) * imgW, 10))
+    return parseInt((this.height / this.width) * imgW, 10)
   }
+}
+
+const replaceCdn = (url) => {
+  return url.replace('images.qipeilong.cn', 'test.tuhu.org').replace(/https?/, 'https')
 }
 
 const hasClass = (element, csName) => {

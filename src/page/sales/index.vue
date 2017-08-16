@@ -96,7 +96,6 @@ export default {
     let that = this
     let parms = { id: this.$route.query.id, ver: '1.0', platform: 1 }
     if (browser.versions().IosApp || browser.versions().AndroidApp) {
-      tools.loading('open')
       SetAppData({
         title: '获取活动框架',
         dataObj: parms,
@@ -115,7 +114,6 @@ export default {
         }).catch((e) => {
           console.log(e)
         })
-        tools.loading('close')
       }
       return false
     }
@@ -134,8 +132,8 @@ export default {
     GetModule (id) {
       let that = this
       let parms = { id: id, ver: '1.0', platform: 1 }
+      alert(browser.versions().AndroidApp)
       if (browser.versions().IosApp || browser.versions().AndroidApp) {
-        tools.loading('open')
         SetAppData({
           title: '获取模板数据',
           dataObj: parms,
@@ -152,7 +150,6 @@ export default {
           }).catch((e) => {
             console.log(e)
           })
-          tools.loading('close')
         }
         return false
       }

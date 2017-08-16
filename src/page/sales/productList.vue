@@ -5,7 +5,7 @@
 		<swiper :options="swiperOption" class="productSwiper" v-if="IData.ContentObj.DataFiltering === 0" ref="mySwiper">
 	        <swiper-slide v-for="product in IData.ContentObj.ProductItems" class="item" :key="product.IID">
 	        	<div>
-	        		<div class="ProductImg">
+	        		<div class="ProductImg" @click="operation(2,{'UserProductId': product.UserProductId, 'ContentType': 2})">
 		        		<i 
 		    			class="icon" 
 		    			v-if="product.IconUrl" 
@@ -25,7 +25,7 @@
 	        			<span v-if="product.LimitMax>0">限购:{{product.LimitMax}}</span>
 	        			<span>库存:{{product.CurrentAmount}}</span>
 	        		</div>
-	        		<div class="ProductTitle">
+	        		<div class="ProductTitle" @click="operation(2,{'UserProductId':product.UserProductId, 'ContentType': 2})">
 	        			<span>{{product.ProductName}}</span>
 	        		</div>
 	        		<div class="ProductPrice">
@@ -41,7 +41,7 @@
 
 	    <div class="productCon flex" v-else-if="IData.ContentObj.DataFiltering === 2">
 	        <div class="item flex2" v-for="product in IData.ContentObj.ProductItems" :key="product.IID">
-					<div class="ProductImg">
+					<div class="ProductImg" @click="operation(2,{'UserProductId':product.UserProductId, 'ContentType': 2})">
 						<i 
 		    			class="icon" 
 		    			v-if="product.IconUrl" 
@@ -61,7 +61,7 @@
 	        			<span v-if="product.LimitMax>0">限购:{{product.LimitMax}}</span>
 	        			<span>库存:{{product.CurrentAmount}}</span>
 	        		</div>
-	        		<div class="ProductTitle">
+	        		<div class="ProductTitle" @click="operation(2,{'UserProductId':product.UserProductId, 'ContentType': 2})">
 	        			<span>{{product.ProductName}}</span>
 	        		</div>
 	        		<div class="ProductPrice">

@@ -31,7 +31,10 @@
           slidesPerView: 'auto',
           notNextTick: true,
           slideToClickedSlide: true,
-          centeredSlides: false
+          centeredSlides: false,
+          onSlideChangeStart: function () {
+            alert(111)
+          }
         },
         active: 0,
         top: 0

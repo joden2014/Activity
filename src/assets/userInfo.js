@@ -1,6 +1,5 @@
 import tools from './tools'
 import { browser, StringToJson } from './App'
-
 let userInfo = { }
 userInfo.userId = tools.getLocalStorage('userId')
 window.htmlgetinfo = (res) => {
@@ -12,7 +11,6 @@ window.htmlgetinfo = (res) => {
   }).catch((e) => {
     console.log(e)
   })
-  tools.loading('close')
 }
 
 export const SetApp = (title) => {
@@ -48,7 +46,7 @@ export const SetApp = (title) => {
   } else if (browser.versions().AndroidApp) {
     if (window.android !== undefined) {
       let str = window.android.action(data)
-      userInfo = JSON.parse(str)
+      window.htmlgetinfo(str)
     }
   }
 }

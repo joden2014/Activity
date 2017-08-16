@@ -1,7 +1,7 @@
 <template>
 	<div class="ImgsList">
 		<div v-for="Img in ImgData" :key="Img.IID" v-bind:style="{width:Img.ImgWidth+'%'}" @click="operation(Img.ContentObj.OperationType,Img.ContentObj.ContentValue)">
-            <x-img :src="Img.ContentObj.ImgUrl1" :webp-src="`${Img.ContentObj.ImgUrl1}`" @on-success="success" @on-error="error" class="ximg-demo" error-class="ximg-error" container="#app"></x-img>
+            <x-img :src="GetImgUrl(Img.ContentObj.ImgUrl1,ImgData.length)" :webp-src="`${GetImgUrl(Img.ContentObj.ImgUrl1,ImgData.length)}`" @on-success="success" @on-error="error" class="ximg-demo" error-class="ximg-error" container="#app"></x-img>
         </div>
 	</div>
 </template>
@@ -9,6 +9,7 @@
 <script>
   import { XImg } from 'vux'
   import jump from '../../assets/jump.js'
+  import tools from '../../assets/tools'
   export default {
     components: {
       XImg
@@ -27,6 +28,9 @@
       },
       error (src, ele, msg) {
         console.log('error load', msg, src)
+      },
+      GetImgUrl: (url, col) => {
+        return tools.ImagesUrl(url, col, 1)
       }
     },
     mounted () {

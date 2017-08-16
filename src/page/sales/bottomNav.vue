@@ -1,13 +1,14 @@
 <template>
   <div class="footer">
-    <a v-for="nav in IData.Items" :key="nav.IID" v-bind:style="{width:nav.ImgWidth+'%'}">
-        <img :src="nav.ContentObj.ImgUrl1">
+    <a v-for="nav in IData.Items" :key="nav.IID" v-bind:style="{ width:nav.ImgWidth+'%' }" @click="operation(nav.ContentObj.OperationType,nav.ContentObj.ContentValue)">
+        <img :src="GetImgUrl(nav.ContentObj.ImgUrl1,IData.Items.length)">
    </a>
   </div>
 </template>
 
 <script>
   import jump from '../../assets/jump.js'
+  import tools from '../../assets/tools'
   export default {
     data () {
       return {
@@ -18,6 +19,9 @@
     methods: {
       operation: (type, value) => {
         jump.to(type, value)
+      },
+      GetImgUrl: (url, col) => {
+        return tools.ImagesUrl(url, col, 0.5)
       }
     },
     mounted () {
@@ -36,6 +40,9 @@
 		height:50px;
 		width:100%;
 		z-index: 666;
+    a{
+      display:block;
+    }
 		img{
 			height:100%;
 		}

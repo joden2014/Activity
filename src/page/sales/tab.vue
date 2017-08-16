@@ -52,7 +52,6 @@ import swiperNav from './swiperNav.vue'
 import bottomNav from './bottomNav.vue'
 import subTab from './subTab.vue'
 import { InlineLoading } from 'vux'
-import tools from '../../assets/tools'
 import { SetAppData, browser, StringToJson } from '../../assets/App'
 export default {
   components: {
@@ -91,7 +90,6 @@ export default {
       let that = this
       let parms = { id: id, ver: '1.0' }
       if (browser.versions().IosApp || browser.versions().AndroidApp) {
-        tools.loading('open')
         SetAppData({
           title: '获取商品列表',
           dataObj: parms,
@@ -111,7 +109,6 @@ export default {
           }).catch((e) => {
             console.log(e)
           })
-          tools.loading('close')
         }
         return false
       }
@@ -119,7 +116,7 @@ export default {
         url: 'http://m.qipeilong.net/Promotion/GetPromotionProductGroupByGroupID',
         data: parms,
         method: 'POST',
-        load: true,
+        load: false,
         showMsg: true
       }).then((value) => {
         value.index = index
@@ -132,7 +129,6 @@ export default {
       let that = this
       let parms = { id: id, ver: '1.0', platform: 1 }
       if (browser.versions().IosApp || browser.versions().AndroidApp) {
-        tools.loading('open')
         SetAppData({
           title: '获取模板数据',
           dataObj: parms,
@@ -151,7 +147,6 @@ export default {
           }).catch((e) => {
             console.log(e)
           })
-          tools.loading('close')
         }
         return false
       }
@@ -159,7 +154,7 @@ export default {
         url: 'http://m.qipeilong.net/Promotion/GetPromotionStructModelListByPromotionID',
         data: parms,
         method: 'POST',
-        load: true,
+        load: false,
         showMsg: true
       }).then((value) => {
         value.index = index

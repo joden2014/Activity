@@ -1,39 +1,45 @@
 <template>
-	<div>
-		  <div class="tab">
-	      <span v-for="(item,index) in IData.Items[0].ContentObj.ContentValue" @click="onItemClick(item,index)" :key="item.AnchorID" v-bind:class="{flex4:IData.Items[0].ContentObj.ContentValue.length===4,flex3:IData.Items[0].ContentObj.ContentValue.length===3,flex2:IData.Items[0].ContentObj.ContentValue.length===2,flex1:IData.Items[0].ContentObj.ContentValue.length===1,active:active===index}" v-bind:style="{backgroundColor:active===index?IData.Items[0].ContentObj.BgColor1:IData.Items[0].ContentObj.BgColor2,color:active===index?IData.Items[0].ContentObj.FontColor1:IData.Items[0].ContentObj.FontColor2 }">{{item.Title}}</span>
-	    </div>
-	    <div class="tabcontent">
-        <load-more :tip="tips" :show-loading="IsLoding" v-show="!IsLoding"></load-more>
-        <div v-for="item in res.Data" class="TabCon" :class="'TabCon'+item.IID" :key="item.IID" ref="myTabCon">
-          <!-- 轮播类型 -->
-  
-            <swiperHtml :IData="item.Items" v-if="item.ContentType==='1'"></swiperHtml>
+  <div>
+      <div class="tab">
+        <span v-for="(item,index) in IData.Items[0].ContentObj.ContentValue" @click="onItemClick(item,index)" :key="item.AnchorID" v-bind:class="{flex4:IData.Items[0].ContentObj.ContentValue.length===4,flex3:IData.Items[0].ContentObj.ContentValue.length===3,flex2:IData.Items[0].ContentObj.ContentValue.length===2,flex1:IData.Items[0].ContentObj.ContentValue.length===1,active:active===index}" v-bind:style="{backgroundColor:active===index?IData.Items[0].ContentObj.BgColor1:IData.Items[0].ContentObj.BgColor2,color:active===index?IData.Items[0].ContentObj.FontColor1:IData.Items[0].ContentObj.FontColor2 }">{{item.Title}}</span>
+      </div>
+      <div class="tabcontent">
+        <inline-loading v-show="!IsLoding"></inline-loading>
+        <div v-for="(dataList,index) in res" class="item" v-show="active===index">
+          <div v-for="item in dataList.Data" class="TabCon" :class="'floor'+item.IID" :key="item.IID" ref="myTabCon" v-if="dataList.Data.ContentType !== 3">
+            <!-- 轮播类型 -->
+              <swiperHtml :IData="item.Items" v-if="item.ContentType==='1'"></swiperHtml>
 
-          <!-- 图片类型 -->
-            <Images :ImgData="item.Items" v-else-if="item.ContentType==='2'"></Images>
+            <!-- 图片类型 -->
+              <Images :ImgData="item.Items" v-else-if="item.ContentType==='2'"></Images>
 
-          <!-- 商品单品类型 -->
-            <product :IData="item" v-else-if="item.ContentType==='4'"></product>
+            <!-- 商品单品类型 -->
+              <product :IData="item" v-else-if="item.ContentType==='4'"></product>
 
-          <!-- 锚点导航 -->
-            <swiperNav :IData="item" style="background:#000" v-else-if="item.ContentType==='6'" ref="nav"></swiperNav>
+            <!-- 锚点导航 -->
+              <swiperNav :IData="item" style="background:#000" v-else-if="item.ContentType==='6'" ref="nav"></swiperNav>
 
-          <!-- 底部导航 -->
-            <bottomNav :IData="item" v-else-if="item.ContentType==='5'"></bottomNav>
 
-          <!-- 引用模板 -->
-          <div v-else-if="item.ContentType==='8'">
-            引用模板
+            <!-- tab切换 -->
+              <subTab :IData="item" v-else-if="item.ContentType==='7'" ref="subTab"></subTab>
+
+            <!-- 底部导航 -->
+              <bottomNav :IData="item" v-else-if="item.ContentType==='5'"></bottomNav>
+
+            <!-- 引用模板 -->
+            <div v-else-if="item.ContentType==='8'">
+              引用模板
+            </div>
+
+            <!-- 商品列表类型 -->
+
+            <productList :IData="item.Items[0]"  v-else-if="item.ContentType==='3'"></productList>
+
           </div>
-
           <!-- 商品列表类型 -->
-            <productList :IData="item.Items[0]" v-else-if="item.ContentType==='3'"></productList>
+          <productList :IData="dataList.Data" v-if="dataList.Data.ContentType === 3"></productList>
         </div>
-        <!-- 商品列表类型 -->
-        <productList :IData="list" class="product" v-if="hasList"></productList>
-        
-	    </div>
+      </div>
     </div>
 </template>
 
@@ -44,7 +50,9 @@ import productList from './productList.vue'
 import product from './product.vue'
 import swiperNav from './swiperNav.vue'
 import bottomNav from './bottomNav.vue'
-import { LoadMore } from 'vux'
+import subTab from './subTab.vue'
+import { InlineLoading } from 'vux'
+import { SetAppData, browser, StringToJson } from '../../assets/App'
 export default {
   components: {
     swiperHtml,
@@ -53,50 +61,105 @@ export default {
     product,
     swiperNav,
     bottomNav,
-    LoadMore
+    subTab,
+    InlineLoading
   },
   data () {
     return {
-      res: { },
+      res: [],
       active: 0,
       IsLoding: true,
-      tips: '正在加载中...',
-      list: {},
       hasList: false
     }
   },
   methods: {
     onItemClick (item, index) {
       this.active = index
-      if (item.GroupType === 0) {
-        this.GetModule(item.AnchorID)
+      this.IsLoding = false
+      if (!this.res[index]) {
+        if (item.GroupType === 0) {
+          this.GetModule(item.AnchorID, index)
+        } else {
+          this.GetProductList(item.AnchorID, index)
+        }
       } else {
-        this.GetProductList(item.AnchorID)
+        this.IsLoding = true
       }
     },
-    GetProductList (id) {
+    GetProductList (id, index) {
       let that = this
+      let parms = { id: id, ver: '1.0' }
+      if (browser.versions().IosApp || browser.versions().AndroidApp) {
+        SetAppData({
+          title: '获取商品列表',
+          dataObj: parms,
+          api: 'Promotion/GetPromotionProductGroupByGroupID',
+          noDomain: false,
+          callBack: 'CallBackGetModuleData'
+        })
+        window.CallBackGetModuleData = (res) => {
+          let promise = new Promise((resolve, reject) => {
+            resolve(res)
+          })
+          promise.then((res) => {
+            StringToJson(res).index = index
+            that.res.push(StringToJson(res))
+            that.hasList = true
+            that.IsLoding = true
+          }).catch((e) => {
+            console.log(e)
+          })
+        }
+        return false
+      }
       this.$ajax({
         url: 'http://m.qipeilong.net/Promotion/GetPromotionProductGroupByGroupID',
-        data: { id: id, ver: '1.0', userId: 'b11dfe19ef4d4f60860dda673dfa7863' },
+        data: parms,
         method: 'POST',
-        load: true,
+        load: false,
         showMsg: true
       }).then((value) => {
-        that.list = value.Data
+        value.index = index
+        that.res.push(value)
         that.hasList = true
+        that.IsLoding = true
       })
     },
-    GetModule (id) {
+    GetModule (id, index) {
       let that = this
+      let parms = { id: id, ver: '1.0', platform: 1 }
+      if (browser.versions().IosApp || browser.versions().AndroidApp) {
+        SetAppData({
+          title: '获取模板数据',
+          dataObj: parms,
+          api: 'Promotion/GetPromotionStructModelListByPromotionID',
+          noDomain: false,
+          callBack: 'CallBackGetModuleData'
+        })
+        window.CallBackGetModuleData = (res) => {
+          let promise = new Promise((resolve, reject) => {
+            resolve(res)
+          })
+          promise.then((res) => {
+            StringToJson(res).index = index
+            that.res.push(StringToJson(res))
+            that.IsLoding = true
+          }).catch((e) => {
+            console.log(e)
+          })
+        }
+        return false
+      }
       this.$ajax({
         url: 'http://m.qipeilong.net/Promotion/GetPromotionStructModelListByPromotionID',
-        data: { id: id, ver: '1.0', platform: 1, userId: 'b11dfe19ef4d4f60860dda673dfa7863' },
+        data: parms,
         method: 'POST',
-        load: true,
+        load: false,
         showMsg: true
       }).then((value) => {
-        that.res = value
+        value.index = index
+        that.res.push(value)
+        that.IsLoding = true
       })
     }
   },
@@ -104,9 +167,9 @@ export default {
     let id = this.IData.Items[0].ContentObj.ContentValue[0].AnchorID
     let type = this.IData.Items[0].ContentObj.ContentValue[0].GroupType
     if (type === 0) {
-      this.GetModule(id)
+      this.GetModule(id, 0)
     } else {
-      this.GetProductList(id)
+      this.GetProductList(id, 0)
     }
   },
   props: ['IData']
@@ -115,17 +178,17 @@ export default {
 
 <style lang="less" scoped>
 .tab{
-	width: 100%;
-	height:2rem;
-	line-height:2rem;
-	display:flex;
-	justify-content:space-between;
-	background: #fff;
-	span{
-		display:inline-block;
-		font-size: 0.6rem;
-		text-align: center;
-	}
+  width: 100%;
+  height:2rem;
+  line-height:2rem;
+  display:flex;
+  justify-content:space-between;
+  background: #fff;
+  span{
+    display:inline-block;
+    font-size: 0.6rem;
+    text-align: center;
+  }
 }
   .flex1{
     width: 100%;

@@ -56,6 +56,7 @@ const jump = {
     }
   },
   getConpon: (type, value) => {
+    Gologin()
     let prams = { couponId: value.CouponID, ver: '1.0', couponType: value.CouponType }
     if (browser.versions().IosApp || browser.versions().AndroidApp) {
       tools.loading('open')
@@ -79,6 +80,7 @@ const jump = {
     })
   },
   AddShopCart: (type, value) => {
+    Gologin()
     let prams = { userProductId: value.UserProductId, ver: '1.0', Count: 1, isGroup: value.ProductType }
     if (browser.versions().IosApp || browser.versions().AndroidApp) {
       tools.loading('open')
@@ -130,7 +132,7 @@ window.CallBackDataForJump = (res) => {
     if (AppData.Success) {
       tools.Success({
         success: true,
-        text: AppData.ErrorMsg
+        text: '成功加入购物车'
       })
     } else {
       tools.msg({
@@ -147,7 +149,9 @@ window.CallBackDataForJump = (res) => {
 
 const jumpToPage = (type, value) => {
   let parms = { ContentType: 8, ContentKey: value.ContentKey }
-
+  if (value.ContentType && value.ContentType === 2) {
+    parms = value
+  }
   let dataObj = {
     'actionID': '1',
     'actionMSG': '跳转APP',
@@ -172,6 +176,9 @@ const jumpToPage = (type, value) => {
   } else if (browser.versions().AndroidApp) {
     window.android.action(data)
     return false
+  }
+  if (value.ContentType && value.ContentType === 2) {
+    window.location.href = '/Home/Detail?UserProductID=' + value.UserProductId
   }
   let Url = ''
   switch (value.ContentKey) {
@@ -235,4 +242,7 @@ const jumpToPage = (type, value) => {
   window.location.href = Url
 }
 
+const Gologin = () => {
+  console.log(userInfo)
+}
 export default jump
