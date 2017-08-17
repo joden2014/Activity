@@ -40,8 +40,11 @@
 		height:50px;
 		width:100%;
 		z-index: 666;
+    overflow: hidden;
     a{
       display:block;
+      height:100%;
+      width:100%;
     }
 		img{
 			height:100%;

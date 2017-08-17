@@ -112,11 +112,19 @@ window.CallBackCouponDataForJump = (res) => {
   })
   promise.then((res) => {
     AppData = StringToJson(res)
-    tools.msg({
-      text: AppData.ErrorMsg,
-      position: 'center',
-      time: 1000
-    })
+    if (AppData.Success) {
+      tools.msg({
+        text: '领取成功',
+        position: 'center',
+        time: 3000
+      })
+    } else {
+      tools.msg({
+        text: AppData.ErrorMsg,
+        position: 'center',
+        time: 3000
+      })
+    }
   }).catch((e) => {
     console.log(e)
   })
@@ -178,7 +186,8 @@ const jumpToPage = (type, value) => {
     return false
   }
   if (value.ContentType && value.ContentType === 2) {
-    window.location.href = '/Home/Detail?UserProductID=' + value.UserProductId
+    window.location.href = '/Home/Detail?UserProductID=' + value.UserProductID
+    return false
   }
   let Url = ''
   switch (value.ContentKey) {

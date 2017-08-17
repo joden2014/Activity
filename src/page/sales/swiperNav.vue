@@ -3,8 +3,8 @@
   <sticky ref="sticky" :offset="0" :check-sticky-support="false">
     <div class="swiperBox">
       <swiper :options="swiperOption" class="swiperNav" ref="mySwiper">
-        <swiper-slide v-for="(nav,index) in IData.Items[0].ContentObj.ContentValue" class="item" v-bind:class="{flex4:IData.Items[0].ContentObj.ContentValue.length===4,flex3:IData.Items[0].ContentObj.ContentValue.length===3,flex2:IData.Items[0].ContentObj.ContentValue.length===2,flex1:IData.Items[0].ContentObj.ContentValue.length===1,active:active===index}" :key="nav.AnchorID" @click.native="goAnchor('.floor'+nav.AnchorID,index)" v-bind:style="{backgroundColor:active===index?IData.Items[0].ContentObj.BgColor1:IData.Items[0].ContentObj.BgColor2,color:active===index?IData.Items[0].ContentObj.FontColor1:IData.Items[0].ContentObj.FontColor2 }">
-          <span>{{nav.Title}}</span>
+        <swiper-slide v-for="(nav,index) in IData.Items[0].ContentObj.ContentValue" class="item" v-bind:class="{flex4:IData.Items[0].ContentObj.ContentValue.length===4,flex3:IData.Items[0].ContentObj.ContentValue.length===3,flex2:IData.Items[0].ContentObj.ContentValue.length===2,flex1:IData.Items[0].ContentObj.ContentValue.length===1,active:active===index}" :key="nav.AnchorID" @click.native="goAnchor('.floor'+nav.AnchorID)" v-bind:style="{backgroundColor:active===index?IData.Items[0].ContentObj.BgColor1:IData.Items[0].ContentObj.BgColor2,color:active===index?IData.Items[0].ContentObj.FontColor1:IData.Items[0].ContentObj.FontColor2 }">
+          <span @click="active = index">{{nav.Title}}</span>
         </swiper-slide>
       </swiper>
       <span v-show="IData.Items[0].ContentObj.ContentValue > 4"></span>
@@ -33,7 +33,6 @@
           slideToClickedSlide: true,
           centeredSlides: false,
           onSlideChangeStart: function () {
-            alert(111)
           }
         },
         active: 0,
@@ -52,8 +51,7 @@
       slideTo: (n, e) => {
         console.log(e)
       },
-      goAnchor: (selector, index) => {
-        this.active = index
+      goAnchor: (selector) => {
         let jump = document.querySelectorAll(selector)
         let total = jump[0].offsetTop
         let distance = document.documentElement.scrollTop || document.body.scrollTop
@@ -126,6 +124,12 @@
       word-wrap:break-word;
       font-size: 0.60rem;
       line-height:2rem;
+      span{
+        width:100%;
+        height:100%;
+        display:inline-block;
+        text-align:center;
+      }
   }
   .fixed{
     position: fixed;

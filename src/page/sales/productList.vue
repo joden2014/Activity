@@ -5,7 +5,7 @@
 		<swiper :options="swiperOption" class="productSwiper" v-if="IData.ContentObj.DataFiltering === 0" ref="mySwiper">
 	        <swiper-slide v-for="product in IData.ContentObj.ProductItems" class="item" :key="product.IID">
 	        	<div>
-	        		<div class="ProductImg" @click="operation(2,{'UserProductId': product.UserProductId, 'ContentType': 2})">
+	        		<div class="ProductImg" @click="operation(2,{'UserProductID': product.UserProductId, 'ContentType': 2})">
 		        		<i 
 		    			class="icon" 
 		    			v-if="product.IconUrl" 
@@ -25,11 +25,11 @@
 	        			<span v-if="product.LimitMax>0">限购:{{product.LimitMax}}</span>
 	        			<span>库存:{{product.CurrentAmount}}</span>
 	        		</div>
-	        		<div class="ProductTitle" @click="operation(2,{'UserProductId':product.UserProductId, 'ContentType': 2})">
+	        		<div class="ProductTitle" @click="operation(2,{'UserProductID':product.UserProductId, 'ContentType': 2})">
 	        			<span>{{product.ProductName}}</span>
 	        		</div>
 	        		<div class="ProductPrice">
-	        			<span>￥<em>{{product.ListPriceStr}}</em><i v-if="product.CouponID!==null && product.ListPriceStr!=='认证会员可见'" class="coupons" @click="operation(4,{'CouponID': product.CouponID, 'CouponType': product.CouponType})">券</i></span>
+	        			<span>￥<em>{{product.ListPriceStr}}</em><i v-if="product.CouponID!==null && product.ListPriceStr!=='会员可见'" class="coupons" @click="operation(4,{'CouponID': product.CouponID, 'CouponType': product.CouponType})">券</i></span>
 	        		</div>
 	        		<div class="ProductBtn">
 	        			<button @click="operation(5,{'UserProductId':product.ProductType==1?product.PromotionId:product.UserProductId, 'ProductType': product.ProductType})">马上抢</button>
@@ -41,7 +41,7 @@
 
 	    <div class="productCon flex" v-else-if="IData.ContentObj.DataFiltering === 2">
 	        <div class="item flex2" v-for="product in IData.ContentObj.ProductItems" :key="product.IID">
-					<div class="ProductImg" @click="operation(2,{'UserProductId':product.UserProductId, 'ContentType': 2})">
+					<div class="ProductImg" @click="operation(2,{'UserProductID':product.UserProductId, 'ContentType': 2})">
 						<i 
 		    			class="icon" 
 		    			v-if="product.IconUrl" 
@@ -61,11 +61,11 @@
 	        			<span v-if="product.LimitMax>0">限购:{{product.LimitMax}}</span>
 	        			<span>库存:{{product.CurrentAmount}}</span>
 	        		</div>
-	        		<div class="ProductTitle" @click="operation(2,{'UserProductId':product.UserProductId, 'ContentType': 2})">
+	        		<div class="ProductTitle" @click="operation(2,{'UserProductID':product.UserProductId, 'ContentType': 2})">
 	        			<span>{{product.ProductName}}</span>
 	        		</div>
 	        		<div class="ProductPrice">
-	        			<span>￥<em>{{product.ListPriceStr}}</em><i v-if="product.CouponID!==null && product.ListPriceStr!=='认证会员可见'" class="coupons" @click="operation(4,{CouponID: product.CouponID,CouponType: product.CouponType})">券</i></span>
+	        			<span>￥<em>{{product.ListPriceStr}}</em><i v-if="product.CouponID!==null && product.ListPriceStr!=='会员可见'" class="coupons" @click="operation(4,{CouponID: product.CouponID,CouponType: product.CouponType})">券</i></span>
 	        		</div>
 	        		<div class="ProductBtn">
 	        			<button @click="operation(5,{'UserProductId':product.ProductType==1?product.PromotionId:product.UserProductId, 'ProductType': product.ProductType})">马上抢</button>

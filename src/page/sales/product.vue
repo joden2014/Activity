@@ -24,7 +24,7 @@
 		    			<span v-if="product.LimitMax>0">限购:{{product.LimitMax}}</span>
 		    			<span>库存:{{product.CurrentAmount}}</span>
 		    		</div>
-		    		<div class="ProductTitle" @click="operation(2,{'UserProductId': product.UserProductId, 'ContentType': 2})">
+		    		<div class="ProductTitle" @click="operation(2,{'UserProductID': product.UserProductId, 'ContentType': 2})">
 		    			<span>{{product.ProductName}}</span>
 		    		</div>
 
@@ -35,7 +35,7 @@
 		    		</div>
 					<div v-bind:class="{ flex:IData.StructID===1 }">
 			    		<div class="ProductPrice">
-			    			<span>￥<em>{{product.ListPriceStr}}</em><i v-if="product.CouponID!==null && product.ListPriceStr!=='认证会员可见'" class="coupons" @click="operation(4,{'CouponID': product.CouponID, 'CouponType': product.CouponType})">券</i></span>
+			    			<span>￥<em>{{product.ListPriceStr}}</em><i v-if="product.CouponID!==null && product.ListPriceStr!=='会员可见'" class="coupons" @click="operation(4,{'CouponID': product.CouponID, 'CouponType': product.CouponType})">券</i></span>
 			    		</div>
 			    		<div class="ProductBtn">
 			    			<button @click="operation(5,{'UserProductId': product.ProductType==1?product.PromotionId:product.UserProductId, 'ProductType': product.ProductType})">马上抢</button>

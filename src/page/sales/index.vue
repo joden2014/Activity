@@ -109,8 +109,10 @@ export default {
           resolve(res)
         })
         promise.then((res) => {
-          that.DrawModule(StringToJson(res))
-          SetApp(StringToJson(res).Data.PromotionName)
+          let data = StringToJson(res)
+          that.DrawModule(data)
+          SetApp(data.Data.PromotionName)
+          tools.ResetBodyStyle(data.Data.BgImgUrl, data.Data.BgColor)
         }).catch((e) => {
           console.log(e)
         })
@@ -121,11 +123,12 @@ export default {
       url: 'http://m.qipeilong.net/Promotion/GetPromotionModelInfoByID',
       data: parms,
       method: 'POST',
-      load: false,
+      load: true,
       showMsg: true
     }).then((value) => {
       that.IsH5 = true
       that.DrawModule(value)
+      tools.ResetBodyStyle(value.Data.BgImgUrl, value.Data.BgColor)
     })
   },
   methods: {

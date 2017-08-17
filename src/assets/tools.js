@@ -114,6 +114,15 @@ const tools = {
     let imgW = parseInt(window.innerWidth / this.columns, 10)
     console.log(parseInt((this.height / this.width) * imgW, 10))
     return parseInt((this.height / this.width) * imgW, 10)
+  },
+  ResetBodyStyle: (bg, bgColor) => {
+    if (bg !== null) {
+      document.body.style.backgroundImage = 'url(' + bg + ')'
+    }
+
+    if (bgColor !== null) {
+      document.body.style.backgroundColor = bgColor
+    }
   }
 }
 
