@@ -18,7 +18,7 @@
 	          				}">
 	          			<img :src="product.IconUrl" v-bind:style="{opacity:product.IconTrsp}">
 	          			</i>
-	        			<img :src="product.ProductImages.split(',')[0]">
+	          			<img v-lazy="product.ProductImages.split(',')[0]" />
 	        		</div>
 	        		<div class="ProductNum">
 	        			<span v-if="product.LimitMin>0">起购:{{product.LimitMin}}</span>
@@ -54,7 +54,7 @@
 	          				}">
 	          			<img :src="product.IconUrl" v-bind:style="{opacity:product.IconTrsp}">
 	          			</i>
-	        			<x-img :src="product.ProductImages.split(',')[0]" :webp-src="`${product.ProductImages.split(',')[0]}`" @on-success="success" @on-error="error" class="ximg-demo" error-class="ximg-error" container="#app"></x-img>
+	        			<img v-lazy="product.ProductImages.split(',')[0]" />
 	        		</div>
 	        		<div class="ProductNum">
 	        			<span v-if="product.LimitMin>0">起购:{{product.LimitMin}}</span>

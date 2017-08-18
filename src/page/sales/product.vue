@@ -2,7 +2,7 @@
 <template>
 	<div class="productList">
 		<div class="productCon" v-for="list in IData.Items" v-bind:class="{ flex2: IData.StructID===4 || IData.StructID===2,flex1: IData.StructID===1,flex3: IData.StructID===3 }">
-	        <div class="item" v-for="product in list.ContentObj.ProductItems" :key="product.IID">
+	        <div class="item" v-for="product in list.ContentObj.ProductItems" :key="product.IID" :style="{background:list.ContentObj.BgColor.indexOf('#')===-1?'#'+list.ContentObj.BgColor:list.ContentObj.BgColor}">
 	    		<div class="ProductImg" @click="operation(2,{'UserProductID': product.UserProductId, 'ContentType': 2})">
 	    			<i 
 	    			class="icon" 
@@ -16,7 +16,7 @@
           				}">
           			<img :src="product.IconUrl" v-bind:style="{opacity:product.IconTrsp}">
           			</i>
-	    			<x-img :src="product.ProductImages.split(',')[0]" :webp-src="`${product.ProductImages.split(',')[0]}`" @on-success="success" @on-error="error" class="ximg-demo" error-class="ximg-error" container="#app"></x-img>
+	    			<img v-lazy="product.ProductImages.split(',')[0]" />
 	    		</div>
 	    		<div>
 		    		<div class="ProductNum" v-if="IData.StructID!==1">
@@ -24,7 +24,7 @@
 		    			<span v-if="product.LimitMax>0">限购:{{product.LimitMax}}</span>
 		    			<span>库存:{{product.CurrentAmount}}</span>
 		    		</div>
-		    		<div class="ProductTitle" @click="operation(2,{'UserProductID': product.UserProductId, 'ContentType': 2})">
+		    		<div class="ProductTitle" @click="operation(2,{'UserProductID': product.UserProductId, 'ContentType': 2})":style="{color:list.ContentObj.FontColor.indexOf('#')===-1?'#'+list.ContentObj.FontColor:list.ContentObj.FontColor}">
 		    			<span>{{product.ProductName}}</span>
 		    		</div>
 

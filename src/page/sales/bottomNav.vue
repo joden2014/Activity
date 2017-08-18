@@ -1,7 +1,7 @@
 <template>
   <div class="footer">
     <a v-for="nav in IData.Items" :key="nav.IID" v-bind:style="{ width:nav.ImgWidth+'%' }" @click="operation(nav.ContentObj.OperationType,nav.ContentObj.ContentValue)">
-        <img :src="GetImgUrl(nav.ContentObj.ImgUrl1,IData.Items.length)">
+        <img v-lazy="GetImgUrl(nav.ContentObj.ImgUrl1,IData.Items.length)" />
    </a>
   </div>
 </template>

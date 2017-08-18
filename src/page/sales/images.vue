@@ -1,7 +1,7 @@
 <template>
 	<div class="ImgsList">
 		<div v-for="Img in ImgData" :key="Img.IID" v-bind:style="{width:Img.ImgWidth+'%'}" @click="operation(Img.ContentObj.OperationType,Img.ContentObj.ContentValue)">
-            <x-img :src="GetImgUrl(Img.ContentObj.ImgUrl1,ImgData.length)" :webp-src="`${GetImgUrl(Img.ContentObj.ImgUrl1,ImgData.length)}`" @on-success="success" @on-error="error" class="ximg-demo" error-class="ximg-error" container="#app"></x-img>
+            <img v-lazy="GetImgUrl(Img.ContentObj.ImgUrl1,ImgData.length)" />
         </div>
 	</div>
 </template>
