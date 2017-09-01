@@ -6,13 +6,24 @@
 import axios from 'axios'
 import qs from 'qs'
 import tools from '../assets/tools'
-import userInfo from '../assets/userInfo'
+import location from '../assets/location'
+import { userInfo } from '../assets/userInfo'
+
 const AjaxData = (obj) => {
   let { url, data = { }, method, load, showMsg = true } = obj
+  let currentcity = tools.getLocalStorage('currentcity')
+  if (!currentcity || currentcity === '') {
+    location.init()
+  } else {
+    currentcity = JSON.parse(currentcity)
+    data.cityId = currentcity.LevelTwoUID
+  }
   if (load) {
     tools.loading('open')
   }
-  data.userId = userInfo.userId
+  if (userInfo.userId) {
+    data.userId = userInfo.userId
+  }
   return new Promise((resolve, reject) => {
     axios({
       method: method || `POST`,

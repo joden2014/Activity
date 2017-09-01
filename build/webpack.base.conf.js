@@ -60,6 +60,9 @@ let webpackConfig = {
         name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
       }
     }]
+  },
+  externals: {
+    'AMap': 'AMap'
   }
 }
 

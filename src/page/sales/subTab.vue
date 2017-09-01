@@ -1,11 +1,11 @@
 <template>
   <div>
-      <div class="tab">
+      <div class="tab subTab">
         <span v-for="(item,index) in IData.Items[0].ContentObj.ContentValue" @click="onItemClick(item,index)" :key="item.AnchorID" v-bind:class="{flex4:IData.Items[0].ContentObj.ContentValue.length===4,flex3:IData.Items[0].ContentObj.ContentValue.length===3,flex2:IData.Items[0].ContentObj.ContentValue.length===2,flex1:IData.Items[0].ContentObj.ContentValue.length===1,active:active===index}" v-bind:style="{backgroundColor:active===index?IData.Items[0].ContentObj.BgColor1:IData.Items[0].ContentObj.BgColor2,color:active===index?IData.Items[0].ContentObj.FontColor1:IData.Items[0].ContentObj.FontColor2 }">{{item.Title}}</span>
       </div>
       <div class="tabcontent">
         <inline-loading v-show="!IsLoding"></inline-loading>
-        <div v-for="(dataList,index) in res" class="item" v-show="active===index">
+        <div v-for="(dataList,index) in res" v-if="res!==''" class="item" v-show="active===index">
           <div v-for="item in dataList.Data" class="TabCon" :class="'floor'+item.IID" :key="item.IID" ref="myTabCon" v-if="dataList.Data.ContentType !== 3">
             <!-- 轮播类型 -->
               <swiperHtml :IData="item.Items" v-if="item.ContentType==='1'"></swiperHtml>
@@ -19,10 +19,6 @@
             <!-- 锚点导航 -->
               <swiperNav :IData="item" style="background:#000" v-else-if="item.ContentType==='6'" ref="nav"></swiperNav>
 
-
-            <!-- tab切换 -->
-              <subTab :IData="item" v-else-if="item.ContentType==='7'" ref="subTab"></subTab>
-
             <!-- 底部导航 -->
               <bottomNav :IData="item" v-else-if="item.ContentType==='5'"></bottomNav>
 
@@ -33,11 +29,11 @@
 
             <!-- 商品列表类型 -->
 
-            <productList :IData="item.Items[0]"  v-else-if="item.ContentType==='3'"></productList>
+            <productList :IData="item.Items[0]"  v-else-if="item.ContentType==='3' || item.ContentType===3"></productList>
 
           </div>
           <!-- 商品列表类型 -->
-          <productList :IData="dataList.Data" v-if="dataList.Data.ContentType === 3"></productList>
+          <productList :IData="dataList.Data" v-if="dataList.Data.ContentType === 3 || dataList.Data.ContentType === '3'"></productList>
         </div>
       </div>
     </div>
@@ -50,8 +46,8 @@ import productList from './productList.vue'
 import product from './product.vue'
 import swiperNav from './swiperNav.vue'
 import bottomNav from './bottomNav.vue'
-import subTab from './subTab.vue'
 import { InlineLoading } from 'vux'
+import api from '../../assets/api'
 import { SetAppData, browser, StringToJson } from '../../assets/App'
 export default {
   components: {
@@ -61,7 +57,6 @@ export default {
     product,
     swiperNav,
     bottomNav,
-    subTab,
     InlineLoading
   },
   data () {
@@ -93,11 +88,11 @@ export default {
         SetAppData({
           title: '获取商品列表',
           dataObj: parms,
-          api: 'Promotion/GetPromotionProductGroupByGroupID',
+          api: api.GetProductList(),
           noDomain: false,
-          callBack: 'CallBackGetModuleData'
+          callBack: 'CallBackSubGetProductListData'
         })
-        window.CallBackGetModuleData = (res) => {
+        window.CallBackSubGetProductListData = (res) => {
           let promise = new Promise((resolve, reject) => {
             resolve(res)
           })
@@ -113,7 +108,7 @@ export default {
         return false
       }
       this.$ajax({
-        url: 'http://m.qipeilong.net/Promotion/GetPromotionProductGroupByGroupID',
+        url: api.GetProductList(),
         data: parms,
         method: 'POST',
         load: false,
@@ -132,11 +127,11 @@ export default {
         SetAppData({
           title: '获取模板数据',
           dataObj: parms,
-          api: 'Promotion/GetPromotionStructModelListByPromotionID',
+          api: api.GetModule(),
           noDomain: false,
-          callBack: 'CallBackGetModuleData'
+          callBack: 'CallBackSubGetModuleData'
         })
-        window.CallBackGetModuleData = (res) => {
+        window.CallBackSubGetModuleData = (res) => {
           let promise = new Promise((resolve, reject) => {
             resolve(res)
           })
@@ -151,7 +146,7 @@ export default {
         return false
       }
       this.$ajax({
-        url: 'http://m.qipeilong.net/Promotion/GetPromotionStructModelListByPromotionID',
+        url: api.GetModule(),
         data: parms,
         method: 'POST',
         load: false,

@@ -1,3 +1,5 @@
+import tools from './tools'
+import { userInfo, GetAppUser } from './userInfo'
 export const browser = {
   versions: () => {
     let u = navigator.userAgent
@@ -65,40 +67,83 @@ export const BackApp = () => {
   }
 }
 
-export const SetAppData = (obj) => {
-  let { title, dataObj, api, noDomain = true, callBack } = obj
-  dataObj.h5apicallback = callBack
-  dataObj.h5apiname = api
-  let domain = ''
-  if (noDomain) {
-    if (window.location.href.indexOf('net') !== -1) {
-      domain = 'http://m.qipeilong.net/'
-    } else {
-      domain = 'https://m.qipeilong.cn/'
-    }
-    dataObj.domain = domain
-  }
-  let AppServer = {
-    'actionMSG': title,
+export const GoAppLogin = () => {
+  tools.msg({
+    text: '未登录',
+    position: 'center',
+    time: 3000
+  })
+  let obj = {'ContentType': 8, 'ContentKey': '008'}
+  let dataObj = {
+    'actionID': '1',
+    'actionMSG': '登录',
     'Data':
     [
       {
-        'action': 'htmlapi',
-        'data': dataObj
+        'action': 'html2app',
+        'data': obj
       }
     ]
   }
+  let data = JSON.stringify(dataObj)
 
-  let dataStr = JSON.stringify(AppServer)
   if (browser.versions().IosApp) {
     let ifr = document.createElement('iframe')
-    ifr.src = 'htmljs://loadUrl/action?data=' + dataStr
+    ifr.src = 'htmljs://loadUrl/action?data=' + data
     ifr.style.display = 'none'
     document.body.appendChild(ifr)
     window.setTimeout(function () {
       document.body.removeChild(ifr)
-    }, 5000)
+    }, 2000)
   } else if (browser.versions().AndroidApp) {
-    window.android.action(dataStr)
+    window.android.action(data)
   }
+}
+
+export const SetAppData = (obj) => {
+  GetAppUser()
+  setTimeout(() => {
+    let { title, dataObj, api, noDomain = true, callBack } = obj
+    dataObj.h5apicallback = callBack
+    dataObj.h5apiname = api
+    if (browser.versions().IosApp || browser.versions().AndroidApp) {
+      if (userInfo.location_cityId) {
+        dataObj.cityId = userInfo.location_cityId
+      } else if (userInfo[0].location_cityId) {
+        dataObj.cityId = userInfo[0].location_cityId
+      }
+    }
+    let domain = ''
+    if (noDomain) {
+      if (window.location.href.indexOf('net') !== -1) {
+        domain = 'http://m.qipeilong.net/'
+      } else {
+        domain = 'https://m.qipeilong.cn/'
+      }
+      dataObj.domain = domain
+    }
+    let AppServer = {
+      'actionMSG': title,
+      'Data':
+      [
+        {
+          'action': 'htmlapi',
+          'data': dataObj
+        }
+      ]
+    }
+
+    let dataStr = JSON.stringify(AppServer)
+    if (browser.versions().IosApp) {
+      let ifr = document.createElement('iframe')
+      ifr.src = 'htmljs://loadUrl/action?data=' + dataStr
+      ifr.style.display = 'none'
+      document.body.appendChild(ifr)
+      window.setTimeout(function () {
+        document.body.removeChild(ifr)
+      }, 5000)
+    } else if (browser.versions().AndroidApp) {
+      window.android.action(dataStr)
+    }
+  }, 80)
 }

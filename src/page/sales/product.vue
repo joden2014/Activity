@@ -2,7 +2,7 @@
 <template>
 	<div class="productList">
 		<div class="productCon" v-for="list in IData.Items" v-bind:class="{ flex2: IData.StructID===4 || IData.StructID===2,flex1: IData.StructID===1,flex3: IData.StructID===3 }">
-	        <div class="item" v-for="product in list.ContentObj.ProductItems" :key="product.IID" :style="{background:list.ContentObj.BgColor.indexOf('#')===-1?'#'+list.ContentObj.BgColor:list.ContentObj.BgColor}">
+	        <div class="item" v-for="product in list.ContentObj.ProductItems" :key="product.IID" :style="{background:list.ContentObj.BgColor && list.ContentObj.BgColor.indexOf('#')===-1?'#'+list.ContentObj.BgColor:list.ContentObj.BgColor}">
 	    		<div class="ProductImg" @click="operation(2,{'UserProductID': product.UserProductId, 'ContentType': 2})">
 	    			<i 
 	    			class="icon" 
@@ -19,26 +19,43 @@
 	    			<img v-lazy="product.ProductImages.split(',')[0]" />
 	    		</div>
 	    		<div>
-		    		<div class="ProductNum" v-if="IData.StructID!==1">
+		    		<div class="ProductNum" v-if="IData.StructID!==1 && product.States===0">
 		    			<span v-if="product.LimitMin>0">起购:{{product.LimitMin}}</span>
 		    			<span v-if="product.LimitMax>0">限购:{{product.LimitMax}}</span>
 		    			<span>库存:{{product.CurrentAmount}}</span>
 		    		</div>
-		    		<div class="ProductTitle" @click="operation(2,{'UserProductID': product.UserProductId, 'ContentType': 2})":style="{color:list.ContentObj.FontColor.indexOf('#')===-1?'#'+list.ContentObj.FontColor:list.ContentObj.FontColor}">
+	        		<div class="ProductNum" v-else-if="IData.StructID > 1 && product.States > 0" style="background:#a9a7a7;">
+	        			<span v-if="product.LimitMin>0">起购:{{product.LimitMin}}</span>
+	        			<span v-if="product.LimitMax>0">限购:{{product.LimitMax}}</span>
+	        			<span>库存:{{product.CurrentAmount}}</span>
+	        		</div>
+
+		    		<div class="ProductTitle" @click="operation(2,{'UserProductID': product.UserProductId, 'ContentType': 2})":style="{color:list.ContentObj.FontColor &&list.ContentObj.FontColor.indexOf('#')===-1?'#'+list.ContentObj.FontColor:list.ContentObj.FontColor}">
 		    			<span>{{product.ProductName}}</span>
 		    		</div>
 
-		    		<div class="ProductNumForOne" v-if="IData.StructID===1">
+		    		<div class="ProductNumForOne" v-if="IData.StructID===1 && product.States===0">
 		    			<span v-if="product.LimitMin>0">起购:{{product.LimitMin}}</span>
 		    			<span v-if="product.LimitMax>0">限购:{{product.LimitMax}}</span>
 		    			<span>库存:{{product.CurrentAmount}}</span>
 		    		</div>
+		    		<div class="ProductNumForOne" v-else-if="IData.StructID === 1 && product.States > 0" style="background:#a9a7a7;">
+	        			<span v-if="product.LimitMin>0">起购:{{product.LimitMin}}</span>
+	        			<span v-if="product.LimitMax>0">限购:{{product.LimitMax}}</span>
+	        			<span>库存:{{product.CurrentAmount}}</span>
+	        		</div>
+
+
 					<div v-bind:class="{ flex:IData.StructID===1 }">
 			    		<div class="ProductPrice">
 			    			<span>￥<em>{{product.ListPriceStr}}</em><i v-if="product.CouponID!==null && product.ListPriceStr!=='会员可见'" class="coupons" @click="operation(4,{'CouponID': product.CouponID, 'CouponType': product.CouponType})">券</i></span>
 			    		</div>
 			    		<div class="ProductBtn">
-			    			<button @click="operation(5,{'UserProductId': product.ProductType==1?product.PromotionId:product.UserProductId, 'ProductType': product.ProductType})">马上抢</button>
+
+			    			<button @click="operation(5,{'UserProductId':product.ProductType==1?product.PromotionId:product.UserProductId, 'ProductType': product.ProductType})" v-if="product.States==0">马上抢</button>
+
+	        			  	<button v-else style="background:#a9a7a7;">已售罄</button>
+
 			    		</div>
 		    		</div>
 	    		</div>

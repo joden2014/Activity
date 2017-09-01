@@ -104,7 +104,7 @@ const tools = {
     let imgW = parseInt(window.innerWidth / this.columns, 10)
     let imgH = parseInt((this.height / this.width) * imgW, 10)
     const height = Math.ceil(imgH * this.bigger / 10) * 10
-    if (location.href.indexOf('http://localhost:8080') > -1) {
+    if (location.href.indexOf('m.qipeilong') > -1) {
       return replaceCdn(url.replace(/\?.*?99/, `?imageView2/2/interlace/1/q/99/h/${height}`))
     } else {
       return url

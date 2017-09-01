@@ -1,10 +1,9 @@
 <!-- 商品组组件 -->
 <template>
 <div>
-	<div class="productList" v-if="IData.ContentType === 3">
+	<div class="productList" v-if="IData.ContentType === 3 || IData.ContentType === '3'">
 		<swiper :options="swiperOption" class="productSwiper" v-if="IData.ContentObj.DataFiltering === 0" ref="mySwiper">
 	        <swiper-slide v-for="product in IData.ContentObj.ProductItems" class="item" :key="product.IID">
-	        	<div>
 	        		<div class="ProductImg" @click="operation(2,{'UserProductID': product.UserProductId, 'ContentType': 2})">
 		        		<i 
 		    			class="icon" 
@@ -20,7 +19,12 @@
 	          			</i>
 	          			<img v-lazy="product.ProductImages.split(',')[0]" />
 	        		</div>
-	        		<div class="ProductNum">
+	        		<div class="ProductNum" v-if="product.States==0">
+	        			<span v-if="product.LimitMin>0">起购:{{product.LimitMin}}</span>
+	        			<span v-if="product.LimitMax>0">限购:{{product.LimitMax}}</span>
+	        			<span>库存:{{product.CurrentAmount}}</span>
+	        		</div>
+	        		<div class="ProductNum" v-else style="background:#a9a7a7;">
 	        			<span v-if="product.LimitMin>0">起购:{{product.LimitMin}}</span>
 	        			<span v-if="product.LimitMax>0">限购:{{product.LimitMax}}</span>
 	        			<span>库存:{{product.CurrentAmount}}</span>
@@ -29,12 +33,13 @@
 	        			<span>{{product.ProductName}}</span>
 	        		</div>
 	        		<div class="ProductPrice">
-	        			<span>￥<em>{{product.ListPriceStr}}</em><i v-if="product.CouponID!==null && product.ListPriceStr!=='会员可见'" class="coupons" @click="operation(4,{'CouponID': product.CouponID, 'CouponType': product.CouponType})">券</i></span>
+	        			<span>￥<em>{{product.ListPriceStr}}</em><i v-if="product.CouponType > 0 && product.ListPriceStr!=='会员可见'" class="coupons" @click="operation(4,{'CouponID': product.CouponID, 'CouponType': product.CouponType})">券</i></span>
 	        		</div>
 	        		<div class="ProductBtn">
-	        			<button @click="operation(5,{'UserProductId':product.ProductType==1?product.PromotionId:product.UserProductId, 'ProductType': product.ProductType})">马上抢</button>
+	        			<button @click="operation(5,{'UserProductId':product.ProductType==1?product.PromotionId:product.UserProductId, 'ProductType': product.ProductType})" v-if="product.States==0">马上抢</button>
+
+	        			<button v-else style="background:#a9a7a7;">已售罄</button>
 	        		</div>
-	        	</div>
 	        </swiper-slide>
 	        <div class="swiper-scrollbar" slot="scrollbar"></div>
 	    </swiper>
@@ -56,7 +61,12 @@
 	          			</i>
 	        			<img v-lazy="product.ProductImages.split(',')[0]" />
 	        		</div>
-	        		<div class="ProductNum">
+	        		<div class="ProductNum" v-if="product.States==0">
+	        			<span v-if="product.LimitMin>0">起购:{{product.LimitMin}}</span>
+	        			<span v-if="product.LimitMax>0">限购:{{product.LimitMax}}</span>
+	        			<span>库存:{{product.CurrentAmount}}</span>
+	        		</div>
+	        		<div class="ProductNum" v-else style="background:#a9a7a7;">
 	        			<span v-if="product.LimitMin>0">起购:{{product.LimitMin}}</span>
 	        			<span v-if="product.LimitMax>0">限购:{{product.LimitMax}}</span>
 	        			<span>库存:{{product.CurrentAmount}}</span>
@@ -65,10 +75,14 @@
 	        			<span>{{product.ProductName}}</span>
 	        		</div>
 	        		<div class="ProductPrice">
-	        			<span>￥<em>{{product.ListPriceStr}}</em><i v-if="product.CouponID!==null && product.ListPriceStr!=='会员可见'" class="coupons" @click="operation(4,{CouponID: product.CouponID,CouponType: product.CouponType})">券</i></span>
+	        			<span>￥<em>{{product.ListPriceStr}}</em><i v-if="product.CouponType > 0 && product.ListPriceStr!=='会员可见'" class="coupons" @click="operation(4,{CouponID: product.CouponID,CouponType: product.CouponType})">券</i></span>
 	        		</div>
 	        		<div class="ProductBtn">
-	        			<button @click="operation(5,{'UserProductId':product.ProductType==1?product.PromotionId:product.UserProductId, 'ProductType': product.ProductType})">马上抢</button>
+
+	        			<button @click="operation(5,{'UserProductId':product.ProductType==1?product.PromotionId:product.UserProductId, 'ProductType': product.ProductType})" v-if="product.States==0">马上抢</button>
+
+	        			<button v-else style="background:#a9a7a7;">已售罄</button>
+
 	        		</div>
 	        </div>
         </div>

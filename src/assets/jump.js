@@ -1,8 +1,9 @@
 import axios from 'axios'
 import qs from 'qs'
 import tools from './tools'
-import userInfo from './userInfo'
-import { SetAppData, browser, StringToJson } from './App'
+import api from './api'
+import { userInfo, GetAppUser } from '../assets/userInfo'
+import { SetAppData, browser, StringToJson, GoAppLogin } from './App'
 let AppData = { }
 const GetData = (obj) => {
   let { url, data = { }, method, load, showMsg = true } = obj
@@ -63,14 +64,14 @@ const jump = {
       SetAppData({
         title: '领取优惠券',
         dataObj: prams,
-        api: 'SysPromotion/LedCoupon',
+        api: api.LedCoupon(),
         noDomain: false,
         callBack: 'CallBackCouponDataForJump'
       })
       return false
     }
     GetData({
-      url: 'http://m.qipeilong.net/SysPromotion/LedCoupon',
+      url: api.LedCoupon(),
       data: prams,
       method: 'POST',
       load: true,
@@ -87,7 +88,7 @@ const jump = {
       SetAppData({
         title: '加入购物车',
         dataObj: prams,
-        api: 'shoppingcart/AddProductToCart',
+        api: api.AddProductToCart(),
         noDomain: false,
         callBack: 'CallBackDataForJump'
       })
@@ -95,7 +96,7 @@ const jump = {
     }
     prams.userId = userInfo.userId
     GetData({
-      url: 'http://m.qipeilong.net/shoppingcart/AddProductToCart',
+      url: api.AddProductToCart(),
       data: prams,
       method: 'POST',
       load: true,
@@ -252,6 +253,21 @@ const jumpToPage = (type, value) => {
 }
 
 const Gologin = () => {
-  console.log(userInfo)
+  GetAppUser()
+  setTimeout(() => {
+    console.log(!userInfo[0].user_userid)
+    if (browser.versions().IosApp || browser.versions().AndroidApp) {
+      if (!userInfo.user_userid && !userInfo[0].user_userid) {
+        GoAppLogin()
+      }
+    } else {
+      if (!userInfo.userId) {
+        var url = window.location.href
+        tools.setLocalStorage('BackUrl', url)
+        window.location.href = '/Login/LoginIndex'
+      }
+    }
+  }, 80)
 }
+
 export default jump

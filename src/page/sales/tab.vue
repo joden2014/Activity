@@ -33,11 +33,11 @@
 
             <!-- 商品列表类型 -->
 
-            <productList :IData="item.Items[0]"  v-else-if="item.ContentType==='3'"></productList>
+            <productList :IData="item.Items[0]"  v-else-if="item.ContentType==='3' || item.ContentType===3"></productList>
 
           </div>
           <!-- 商品列表类型 -->
-          <productList :IData="dataList.Data" v-if="dataList.Data.ContentType === 3"></productList>
+          <productList :IData="dataList.Data" v-if="dataList.Data.ContentType === 3 || dataList.Data.ContentType === '3'"></productList>
         </div>
 	    </div>
     </div>
@@ -52,6 +52,7 @@ import swiperNav from './swiperNav.vue'
 import bottomNav from './bottomNav.vue'
 import subTab from './subTab.vue'
 import { InlineLoading } from 'vux'
+import api from '../../assets/api'
 import { SetAppData, browser, StringToJson } from '../../assets/App'
 export default {
   components: {
@@ -93,11 +94,11 @@ export default {
         SetAppData({
           title: '获取商品列表',
           dataObj: parms,
-          api: 'Promotion/GetPromotionProductGroupByGroupID',
+          api: api.GetProductList(),
           noDomain: false,
-          callBack: 'CallBackGetModuleData'
+          callBack: 'CallBackGetProductListData'
         })
-        window.CallBackGetModuleData = (res) => {
+        window.CallBackGetProductListData = (res) => {
           let promise = new Promise((resolve, reject) => {
             resolve(res)
           })
@@ -113,7 +114,7 @@ export default {
         return false
       }
       this.$ajax({
-        url: 'http://m.qipeilong.net/Promotion/GetPromotionProductGroupByGroupID',
+        url: api.GetProductList(),
         data: parms,
         method: 'POST',
         load: false,
@@ -132,7 +133,7 @@ export default {
         SetAppData({
           title: '获取模板数据',
           dataObj: parms,
-          api: 'Promotion/GetPromotionStructModelListByPromotionID',
+          api: api.GetModule(),
           noDomain: false,
           callBack: 'CallBackGetModuleData'
         })
@@ -151,7 +152,7 @@ export default {
         return false
       }
       this.$ajax({
-        url: 'http://m.qipeilong.net/Promotion/GetPromotionStructModelListByPromotionID',
+        url: api.GetModule(),
         data: parms,
         method: 'POST',
         load: false,
@@ -178,16 +179,17 @@ export default {
 
 <style lang="less" scoped>
 .tab{
-	width: 100%;
 	height:2rem;
 	line-height:2rem;
 	display:flex;
 	justify-content:space-between;
 	background: #fff;
+  overflow-x: auto;
 	span{
 		display:inline-block;
 		font-size: 0.6rem;
 		text-align: center;
+    white-space: nowrap;
 	}
 }
   .flex1{

@@ -11,7 +11,7 @@
           <Images :ImgData="item.Items" v-else-if="item.ContentType==='2'"></Images>
 
         <!-- 商品列表类型 -->
-          <productList :IData="item.Items[0]" v-else-if="item.ContentType==='3'"></productList>
+          <productList :IData="item.Items[0]" v-else-if="item.ContentType==='3' || item.ContentType===3"></productList>
 
         <!-- 商品单品类型 -->
           <product :IData="item" v-else-if="item.ContentType==='4'"></product>
@@ -36,7 +36,7 @@
                   <Images :ImgData="modulesItem.Items" v-else-if="modulesItem.ContentType==='2'"></Images>
 
                 <!-- 商品列表类型 -->
-                  <productList :IData="modulesItem.Items[0]" v-else-if="modulesItem.ContentType==='3'"></productList>
+                  <productList :IData="modulesItem.Items[0]" v-else-if="modulesItem.ContentType==='3' || modulesItem.ContentType===3"></productList>
 
                 <!-- 商品单品类型 -->
                   <product :IData="modulesItem" v-else-if="modulesItem.ContentType==='4'"></product>
@@ -68,6 +68,7 @@ import Tab from './Tab.vue'
 import tools from '../../assets/tools'
 import { SetAppData, browser, StringToJson } from '../../assets/App'
 import { SetApp } from '../../assets/userInfo'
+import api from '../../assets/api'
 export default {
   data: () => {
     return {
@@ -99,7 +100,7 @@ export default {
       SetAppData({
         title: '获取活动框架',
         dataObj: parms,
-        api: 'Promotion/GetPromotionModelInfoByID',
+        api: api.GetPromotionModelInfoByID(),
         noDomain: false,
         callBack: 'CallBackData'
       })
@@ -110,9 +111,11 @@ export default {
         })
         promise.then((res) => {
           let data = StringToJson(res)
-          that.DrawModule(data)
-          SetApp(data.Data.PromotionName)
-          tools.ResetBodyStyle(data.Data.BgImgUrl, data.Data.BgColor)
+          if (data.Success) {
+            that.DrawModule(data)
+            SetApp(data.Data.PromotionName)
+            tools.ResetBodyStyle(data.Data.BgImgUrl, data.Data.BgColor)
+          }
         }).catch((e) => {
           console.log(e)
         })
@@ -120,27 +123,28 @@ export default {
       return false
     }
     this.$ajax({
-      url: 'http://m.qipeilong.net/Promotion/GetPromotionModelInfoByID',
+      url: api.GetPromotionModelInfoByID(),
       data: parms,
       method: 'POST',
       load: true,
       showMsg: true
     }).then((value) => {
-      that.IsH5 = true
-      that.DrawModule(value)
-      tools.ResetBodyStyle(value.Data.BgImgUrl, value.Data.BgColor)
+      if (value.Success) {
+        that.IsH5 = true
+        that.DrawModule(value)
+        tools.ResetBodyStyle(value.Data.BgImgUrl, value.Data.BgColor)
+      }
     })
   },
   methods: {
     GetModule (id) {
       let that = this
       let parms = { id: id, ver: '1.0', platform: 1 }
-      alert(browser.versions().AndroidApp)
       if (browser.versions().IosApp || browser.versions().AndroidApp) {
         SetAppData({
           title: '获取模板数据',
           dataObj: parms,
-          api: 'Promotion/GetPromotionStructModelListByPromotionID',
+          api: api.GetModule(),
           noDomain: false,
           callBack: 'CallBackGetModuleData'
         })
@@ -157,7 +161,7 @@ export default {
         return false
       }
       this.$ajax({
-        url: 'http://m.qipeilong.net/Promotion/GetPromotionStructModelListByPromotionID',
+        url: api.GetModule(),
         data: parms,
         method: 'POST',
         load: false,
