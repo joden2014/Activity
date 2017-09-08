@@ -11,8 +11,8 @@
 
 <script>
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
-  import jump from '../../assets/jump.js'
-  import tools from '../../assets/tools'
+  import jump from 'assets/jump.js'
+  import tools from 'assets/tools'
   export default {
     components: {
       swiper,

@@ -47,7 +47,7 @@ import product from './product.vue'
 import swiperNav from './swiperNav.vue'
 import bottomNav from './bottomNav.vue'
 import { InlineLoading } from 'vux'
-import api from '../../assets/api'
+import api from 'assets/api'
 import { SetAppData, browser, StringToJson } from '../../assets/App'
 export default {
   components: {

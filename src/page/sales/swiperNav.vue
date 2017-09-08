@@ -16,7 +16,7 @@
 <script>
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
   import { Sticky } from 'vux'
-  import jump from '../../assets/jump.js'
+  import jump from 'assets/jump.js'
   export default {
     components: {
       swiper,

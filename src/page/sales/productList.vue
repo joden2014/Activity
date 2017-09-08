@@ -93,8 +93,8 @@
 <script>
   import { XImg } from 'vux'
   import { swiper, swiperSlide } from 'vue-awesome-swiper'
-  import qplIcon from '../../assets/base46ForImg.js'
-  import jump from '../../assets/jump.js'
+  import qplIcon from 'assets/base46ForImg.js'
+  import jump from 'assets/jump.js'
   export default {
     components: {
       swiper,

@@ -66,7 +66,7 @@
 
 <script>
   import { XImg } from 'vux'
-  import jump from '../../assets/jump.js'
+  import jump from 'assets/jump.js'
   export default {
     components: {
       XImg

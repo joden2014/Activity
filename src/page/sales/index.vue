@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import header from '../../components/header'
+import header from 'components/header'
 import { Group, Cell, XHeader } from 'vux'
 import swiperHtml from './swiper.vue'
 import Images from './images.vue'
@@ -65,10 +65,10 @@ import product from './product.vue'
 import swiperNav from './swiperNav.vue'
 import bottomNav from './bottomNav.vue'
 import Tab from './Tab.vue'
-import tools from '../../assets/tools'
+import tools from 'assets/tools'
 import { SetAppData, browser, StringToJson } from '../../assets/App'
-import { SetApp } from '../../assets/userInfo'
-import api from '../../assets/api'
+import { SetApp } from 'assets/userInfo'
+import api from 'assets/api'
 export default {
   data: () => {
     return {

@@ -7,8 +7,8 @@
 </template>
 
 <script>
-  import jump from '../../assets/jump.js'
-  import tools from '../../assets/tools'
+  import jump from 'assets/jump.js'
+  import tools from 'assets/tools'
   export default {
     data () {
       return {

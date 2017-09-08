@@ -5,9 +5,9 @@
  **/
 import axios from 'axios'
 import qs from 'qs'
-import tools from '../assets/tools'
-import location from '../assets/location'
-import { userInfo } from '../assets/userInfo'
+import tools from 'assets/tools'
+import location from 'assets/location'
+import { userInfo } from 'assets/userInfo'
 
 const AjaxData = (obj) => {
   let { url, data = { }, method, load, showMsg = true } = obj
