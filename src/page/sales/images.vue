@@ -1,7 +1,7 @@
 <template>
 	<div class="ImgsList">
-		<div v-for="Img in ImgData" :key="Img.IID" v-bind:style="{width:Img.ImgWidth+'%'}" @click="operation(Img.ContentObj.OperationType,Img.ContentObj.ContentValue)">
-            <img v-lazy="GetImgUrl(Img.ContentObj.ImgUrl1,ImgData.length)" />
+		<div v-for="Img in ImgData" :key="Img.IID" class="images" v-bind:style="{width:Img.ImgWidth+'%',height:GetImgUrl(Img.ContentObj.ImgUrl1,ImgData.length).height+'px'}" @click="operation(Img.ContentObj.OperationType,Img.ContentObj.ContentValue)">
+            <img v-lazy="GetImgUrl(Img.ContentObj.ImgUrl1,ImgData.length).url" class="lazy-img-fadein"/>
         </div>
 	</div>
 </template>
@@ -46,5 +46,11 @@
 	display:box;
 	display:flexbox;
 	display:-webkit-box;
+  .images{
+     display: -webkit-box;    /*容器为旧伸缩盒*/
+    -webkit-box-align: center; /*设置旧伸缩盒对齐方式*/
+    display: flex;            /*容器为伸缩盒*/
+    align-items: center;  /*纵轴方向上的对齐方式设置为居中*/
+  }
 }
 </style>

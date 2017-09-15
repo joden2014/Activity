@@ -178,11 +178,13 @@ export default {
   line-height:2rem;
   display:flex;
   justify-content:space-between;
-  background: #fff;
+  overflow-x: auto;
   span{
     display:inline-block;
     font-size: 0.6rem;
     text-align: center;
+    white-space: nowrap;
+    padding:0 5px;
   }
 }
   .flex1{

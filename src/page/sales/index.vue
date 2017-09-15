@@ -1,6 +1,6 @@
 <template>
     <div v-if="!show" v-bind:class="{hasBottom:hasBottom}">
-      <x-header :left-options="{backText: ''}" style="background-color:#CC1B23;" v-if="IsH5">{{res.Data.PromotionName}}<a slot="right" href="http://m.qipeilong.net/ShoppingCart/Index?p=1" id="shopCartNum"></a></x-header>
+      <x-header :left-options="{backText: ''}" style="background-color:#CC1B23;" v-if="IsH5">{{res.Data.PromotionName}}<a slot="right" href="https://m.qipeilong.cn/ShoppingCart/Index?p=1" id="shopCartNum"></a></x-header>
       <div v-for="item in res.Data.StructItems" class="floor" :class="'floor'+item.IID" :key="item.IID" ref="myFloor">
 
 
@@ -66,7 +66,7 @@ import swiperNav from './swiperNav.vue'
 import bottomNav from './bottomNav.vue'
 import Tab from './Tab.vue'
 import tools from 'assets/tools'
-import { SetAppData, browser, StringToJson } from '../../assets/App'
+import { SetAppData, browser, StringToJson } from 'assets/App'
 import { SetApp } from 'assets/userInfo'
 import api from 'assets/api'
 export default {
@@ -74,7 +74,6 @@ export default {
     return {
       res: { },
       show: true,
-      url: 'http://m.qipeilong.net/Promotion/GetPromotionModelInfoByID',
       hasBottom: false,
       moduleLsit: [],
       IsH5: false

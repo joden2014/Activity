@@ -255,7 +255,6 @@ const jumpToPage = (type, value) => {
 const Gologin = () => {
   GetAppUser()
   setTimeout(() => {
-    console.log(!userInfo[0].user_userid)
     if (browser.versions().IosApp || browser.versions().AndroidApp) {
       if (!userInfo.user_userid && !userInfo[0].user_userid) {
         GoAppLogin()

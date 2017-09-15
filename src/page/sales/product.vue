@@ -115,7 +115,9 @@
 		width:100%;
 		height:100%;
 		justify-content:space-around;
-
+		.flex3{
+			width:33%;
+		}
 		.flex2{
 			width:48%;
 			

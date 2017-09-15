@@ -2,7 +2,7 @@
   <div class="swiperBox" ref="swipers">
    <swiper :options="InitSwiper"  ref="mySwiper">
     <swiper-slide v-for="item in IData[0].ContentObj.ImgItems" :key="item.IID"  @click.native="operation(item.OperationType,item.ContentValue)">
-    <span><img :src="GetImgUrl(item.ImgUrl1,IData[0].ContentObj)"></span>
+    <span v-bind:style="{'height':GetImgUrl(item.ImgUrl1,IData[0].ContentObj).height+'px'}" class="images"><img :src="GetImgUrl(item.ImgUrl1,IData[0].ContentObj).url" class="lazy-img-fadein"></span>
     </swiper-slide>
    </swiper>
    <div class="swiper-pagination swiper-pagination-bullets"></div>
@@ -157,4 +157,10 @@
 		width: 100%;
 		display: block;
 	}
+  .images{
+     display: -webkit-box;    /*容器为旧伸缩盒*/
+    -webkit-box-align: center; /*设置旧伸缩盒对齐方式*/
+    display: flex;            /*容器为伸缩盒*/
+    align-items: center;  /*纵轴方向上的对齐方式设置为居中*/
+  }
 </style>

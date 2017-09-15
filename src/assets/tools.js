@@ -105,19 +105,21 @@ const tools = {
     let imgH = parseInt((this.height / this.width) * imgW, 10)
     const height = Math.ceil(imgH * this.bigger / 10) * 10
     if (location.href.indexOf('m.qipeilong') > -1) {
-      return replaceCdn(url.replace(/\?.*?99/, `?imageView2/2/interlace/1/q/99/h/${height}`))
+      return {'url': replaceCdn(url.replace(/\?.*?99/, `?imageView2/2/interlace/1/q/99/h/${height}`)), 'height': height}
     } else {
-      return url
+      return {'url': url, 'height': height}
     }
   },
   GetImageHeight: () => {
     let imgW = parseInt(window.innerWidth / this.columns, 10)
-    console.log(parseInt((this.height / this.width) * imgW, 10))
     return parseInt((this.height / this.width) * imgW, 10)
   },
   ResetBodyStyle: (bg, bgColor) => {
     if (bg !== null) {
       document.body.style.backgroundImage = 'url(' + bg + ')'
+      document.body.style.backgroundSize = 'contain'
+      document.body.style.backgroundPosition = 'center'
+      document.body.style.backgroundRepeat = 'repeat-y'
     }
 
     if (bgColor !== null) {
@@ -152,7 +154,7 @@ const CloseModel = () => {
 
 const getShoppingNum = () => {
   GetData({
-    url: 'http://m.qipeilong.net/shoppingcart/GetCartProductsCount',
+    url: 'https://m.qipeilong.cn/shoppingcart/GetCartProductsCount',
     data: { userId: tools.getLocalStorage('userId'), ver: '1.0' },
     method: 'POST',
     load: true,

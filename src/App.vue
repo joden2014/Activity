@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
@@ -24,5 +26,10 @@ body {
 }
   .vux-header-right{
     position:static;
+  }
+  .lazy-img-fadein[lazy=loading] {
+    width: 40px!important;
+    height:38px!important;
+    margin: auto;
   }
 </style>

@@ -190,6 +190,7 @@ export default {
 		font-size: 0.6rem;
 		text-align: center;
     white-space: nowrap;
+    padding:0 5px;
 	}
 }
   .flex1{
