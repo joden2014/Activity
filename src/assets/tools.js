@@ -8,6 +8,8 @@ import qs from 'qs'
 import { browser } from './App'
 
 const tools = {
+  width: '',
+  height: '',
   msg: (obj) => {
     let { text, position, time } = obj
     let Html = '<span class="msg">' + text + '</span>'
@@ -97,21 +99,22 @@ const tools = {
     if (!arr) {
       return
     }
+
     this.bigger = bigger
     this.width = arr[1] - 0
     this.height = arr[2] - 0
     this.columns = columns
-    let imgW = parseInt(window.innerWidth / this.columns, 10)
+    let imgW = parseInt(window.innerWidth / tools.getColumn(columns), 10)
     let imgH = parseInt((this.height / this.width) * imgW, 10)
-    const height = Math.ceil(imgH * this.bigger / 10) * 10
+    const height = Math.ceil(imgH * bigger / 10) * 10
     if (location.href.indexOf('m.qipeilong') > -1) {
-      return {'url': replaceCdn(url.replace(/\?.*?99/, `?imageView2/2/interlace/1/q/99/h/${height}`)), 'height': height}
+      return {'url': replaceCdn(url.replace(/\?.*?99/, `?imageView2/2/interlace/1/q/99/h/${height}`)), 'height': imgH}
     } else {
-      return {'url': url, 'height': height}
+      return {'url': url, 'height': imgH}
     }
   },
   GetImageHeight: () => {
-    let imgW = parseInt(window.innerWidth / this.columns, 10)
+    let imgW = parseInt(window.innerWidth / tools.getColumn(), 10)
     return parseInt((this.height / this.width) * imgW, 10)
   },
   ResetBodyStyle: (bg, bgColor) => {
@@ -125,6 +128,18 @@ const tools = {
     if (bgColor !== null) {
       document.body.style.backgroundColor = bgColor
     }
+  },
+  getColumn: (columns) => {
+    let number = 1
+    if (columns === 1) {
+      number = 1
+    } else if (columns === 2 || columns === 4) {
+      number = 2
+    } else {
+      number = 3
+    }
+    console.log(number)
+    return number
   }
 }
 

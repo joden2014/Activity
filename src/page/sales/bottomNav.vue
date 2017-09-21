@@ -1,7 +1,7 @@
 <template>
   <div class="footer">
     <a v-for="nav in IData.Items" class="images" :key="nav.IID" v-bind:style="{ width:nav.ImgWidth+'%',height:GetImgUrl(nav.ContentObj.ImgUrl1,IData.Items.length).height+'px' }" @click="operation(nav.ContentObj.OperationType,nav.ContentObj.ContentValue)">
-        <img v-lazy="GetImgUrl(nav.ContentObj.ImgUrl1,IData.Items.length).url" class="lazy-img-fadein" />
+        <img v-if="nav.ContentObj.ImgUrl1" v-lazy="GetImgUrl(nav.ContentObj.ImgUrl1,IData.Items.length).url" class="lazy-img-fadein" />
    </a>
   </div>
 </template>
@@ -21,7 +21,7 @@
         jump.to(type, value)
       },
       GetImgUrl: (url, col) => {
-        return tools.ImagesUrl(url, col, 0.5)
+        return tools.ImagesUrl(url, col, 1)
       }
     },
     mounted () {

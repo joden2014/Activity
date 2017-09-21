@@ -1,8 +1,8 @@
 <template>
-  <div class="swiperBox" ref="swipers">
+  <div class="swiperBox" ref="swipers" v-if="IData[0].ContentObj!==null">
    <swiper :options="InitSwiper"  ref="mySwiper">
     <swiper-slide v-for="item in IData[0].ContentObj.ImgItems" :key="item.IID"  @click.native="operation(item.OperationType,item.ContentValue)">
-    <span v-bind:style="{'height':GetImgUrl(item.ImgUrl1,IData[0].ContentObj).height+'px'}" class="images"><img :src="GetImgUrl(item.ImgUrl1,IData[0].ContentObj).url" class="lazy-img-fadein"></span>
+      <span v-if="item.ImgUrl1" class="images"><img :src="item.ImgUrl1" class="lazy-img-fadein"></span>
     </swiper-slide>
    </swiper>
    <div class="swiper-pagination swiper-pagination-bullets"></div>
@@ -125,7 +125,7 @@
             col = 1
           }
         }
-        return tools.ImagesUrl(url, col, 1)
+        return tools.ImagesUrl(url, col, 2)
       }
     },
     mounted () {
@@ -152,11 +152,12 @@
       height:100%;
       width:100%;
     }
+      img{
+    width: 100%;
+    display: block;
+  }
 	}
-	img{
-		width: 100%;
-		display: block;
-	}
+
   .images{
      display: -webkit-box;    /*容器为旧伸缩盒*/
     -webkit-box-align: center; /*设置旧伸缩盒对齐方式*/

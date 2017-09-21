@@ -1,7 +1,7 @@
 <template>
 	<div class="ImgsList">
-		<div v-for="Img in ImgData" :key="Img.IID" class="images" v-bind:style="{width:Img.ImgWidth+'%',height:GetImgUrl(Img.ContentObj.ImgUrl1,ImgData.length).height+'px'}" @click="operation(Img.ContentObj.OperationType,Img.ContentObj.ContentValue)">
-            <img v-lazy="GetImgUrl(Img.ContentObj.ImgUrl1,ImgData.length).url" class="lazy-img-fadein"/>
+		<div v-for="Img in ImgData" :key="Img.IID" class="images" v-if="Img.ContentObj" v-bind:style="{width:Img.ImgWidth+'%',height:GetImgUrl(Img.ContentObj.ImgUrl1,ImgData.length).height+'px'}" @click="operation(Img.ContentObj.OperationType,Img.ContentObj.ContentValue)">
+            <img v-if="Img.ContentObj.ImgUrl1" v-lazy="GetImgUrl(Img.ContentObj.ImgUrl1,ImgData.length).url" class="lazy-img-fadein"/>
         </div>
 	</div>
 </template>
@@ -30,7 +30,7 @@
         console.log('error load', msg, src)
       },
       GetImgUrl: (url, col) => {
-        return tools.ImagesUrl(url, col, 1)
+        return tools.ImagesUrl(url, col, 2)
       }
     },
     mounted () {
@@ -52,5 +52,9 @@
     display: flex;            /*容器为伸缩盒*/
     align-items: center;  /*纵轴方向上的对齐方式设置为居中*/
   }
+}
+img{
+  width:100%;
+  height:100%;
 }
 </style>
