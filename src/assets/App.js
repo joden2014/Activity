@@ -24,7 +24,7 @@ export const browser = {
 }
 
 export const StringToJson = (str) => {
-  let obj
+  let obj = {}
   if (typeof str === 'string') {
     obj = JSON.parse(str)
   } else {

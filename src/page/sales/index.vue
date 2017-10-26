@@ -66,7 +66,7 @@ import swiperNav from './swiperNav.vue'
 import bottomNav from './bottomNav.vue'
 import Tab from './Tab.vue'
 import tools from 'assets/tools'
-import { SetAppData, browser, StringToJson } from 'assets/App'
+import { SetAppData, browser, StringToJson, BackApp } from 'assets/App'
 import { SetApp } from 'assets/userInfo'
 import api from 'assets/api'
 export default {
@@ -114,6 +114,14 @@ export default {
             that.DrawModule(data)
             SetApp(data.Data.PromotionName)
             tools.ResetBodyStyle(data.Data.BgImgUrl, data.Data.BgColor)
+          } else {
+            this.$vux.alert.show({
+              title: '敬请期待后续活动',
+              content: data.ErrorMsg,
+              onHide () {
+                BackApp()
+              }
+            })
           }
         }).catch((e) => {
           console.log(e)
@@ -132,6 +140,14 @@ export default {
         that.IsH5 = true
         that.DrawModule(value)
         tools.ResetBodyStyle(value.Data.BgImgUrl, value.Data.BgColor)
+      } else {
+        this.$vux.alert.show({
+          title: '敬请期待后续活动',
+          content: value.ErrorMsg,
+          onHide () {
+            window.location.href = 'https://m.qipeilong.cn'
+          }
+        })
       }
     })
   },

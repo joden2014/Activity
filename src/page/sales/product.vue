@@ -16,7 +16,7 @@
           				}">
           			<img :src="product.IconUrl" v-bind:style="{opacity:product.IconTrsp}">
           			</i>
-	    			<img v-lazy="product.ProductImages.split(',')[0]" />
+	    			<img :src="product.ProductImages.split(',')[0]+'/h/176'"/>
 	    		</div>
 	    		<div>
 		    		<div class="ProductNum" v-if="IData.StructID!==1 && product.States===0">

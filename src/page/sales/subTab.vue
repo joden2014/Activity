@@ -4,7 +4,7 @@
       <sticky ref="sticky" :offset="0" :check-sticky-support="false">
         <div class="tab subTab">
           <swiper :options="swiperOption" class="swiperNav" ref="mySubTabSwiper">
-            <swiper-slide v-for="(item,index) in IData.Items[0].ContentObj.ContentValue" :key="item.AnchorID" class="itemTab" v-bind:class="{flex4:IData.Items[0].ContentObj.ContentValue.length===4,flex3:IData.Items[0].ContentObj.ContentValue.length===3,flex2:IData.Items[0].ContentObj.ContentValue.length===2,flex1:IData.Items[0].ContentObj.ContentValue.length===1,active:active===index}" v-bind:style="{backgroundColor:active===index?IData.Items[0].ContentObj.BgColor1:IData.Items[0].ContentObj.BgColor2,color:active===index?IData.Items[0].ContentObj.FontColor1:IData.Items[0].ContentObj.FontColor2 }">
+            <swiper-slide v-for="(item,index) in IData.Items[0].ContentObj.ContentValue" :key="item.AnchorID" class="itemTab" v-bind:class="{flex5:IData.Items[0].ContentObj.ContentValue.length===5,flex4:IData.Items[0].ContentObj.ContentValue.length===4,flex3:IData.Items[0].ContentObj.ContentValue.length===3,flex2:IData.Items[0].ContentObj.ContentValue.length===2,flex1:IData.Items[0].ContentObj.ContentValue.length===1,active:active===index}" v-bind:style="{backgroundColor:active===index?IData.Items[0].ContentObj.BgColor1:IData.Items[0].ContentObj.BgColor2,color:active===index?IData.Items[0].ContentObj.FontColor1:IData.Items[0].ContentObj.FontColor2,padding:IData.Items[0].ContentObj.ContentValue.length>5?'0 10px':'0px' }">
                 <span @click="onItemClick(item,index,'.subTab'+IData.Items[0].IID)">{{item.Title}}</span>
             </swiper-slide>
           </swiper>
@@ -15,8 +15,8 @@
         <p style="text-align:center;" v-show="!IsLoding">
           <inline-loading></inline-loading>
         </p>
-        <div v-for="(dataList,index) in res" class="item">
-          <div v-for="item in dataList.Data" class="TabCon" :class="'floor'+item.IID" :key="item.IID" ref="myTabCon" v-if="dataList.Data.ContentType !== 3">
+        <div v-for="(dataList,index) in res" class="item" :class="'item'+dataList.index" v-show="active===dataList.index">
+          <div v-for="item in dataList.Data" class="TabCon" :class="'floor'+item.IID" :key="item.IID" ref="mySubTabCon" v-if="dataList.Data.ContentType !== 3">
             <!-- 轮播类型 -->
               <swiperHtml :IData="item.Items" v-if="item.ContentType==='1'"></swiperHtml>
 
@@ -104,55 +104,25 @@ export default {
     onItemClick (item, index, selector) {
       this.active = index
       this.IsLoding = false
-      if (item.GroupType === 0) {
-        this.GetModule(item.AnchorID, index, selector)
+      if (!this.res[index]) {
+        if (item.GroupType === 0) {
+          this.GetModule(item.AnchorID, index)
+        } else {
+          this.GetProductList(item.AnchorID, index)
+        }
       } else {
-        this.GetProductList(item.AnchorID, index, selector)
+        this.IsLoding = true
+      }
+      if (selector) {
+        this.scrollPage(selector)
       }
     },
     scrollPage (selector) {
-      console.log(selector)
-      let jump = document.querySelectorAll(selector)
-      let total = jump[0].offsetTop
-      let distance = document.documentElement.scrollTop || document.body.scrollTop
-      let step = total / 50
-      if (total > distance) {
-        smoothDown()
-      } else {
-        let newTotal = distance - total
-        step = newTotal / 50
-        smoothUp()
-      }
-
-      function smoothDown () {
-        if (distance < total) {
-          distance += step
-          document.body.scrollTop = distance
-          document.documentElement.scrollTop = distance
-          window.pageYOffset = distance
-          setTimeout(smoothDown, 10)
-        } else {
-          document.body.scrollTop = total
-          document.documentElement.scrollTop = total
-        }
-      }
-
-      function smoothUp () {
-        if (distance > total) {
-          distance -= step
-          document.body.scrollTop = distance
-          document.documentElement.scrollTop = distance
-          window.pageYOffset = distance
-          setTimeout(smoothUp, 10)
-        } else {
-          document.body.scrollTop = total
-          document.documentElement.scrollTop = total
-        }
-      }
+      var anchor = this.$el.querySelector(selector)
+      document.body.scrollTop = anchor.offsetTop
     },
     GetProductList (id, index, selector) {
       let that = this
-      that.res = []
       let parms = { id: id, ver: '1.0' }
       if (browser.versions().IosApp || browser.versions().AndroidApp) {
         SetAppData({
@@ -198,7 +168,6 @@ export default {
     },
     GetModule (id, index, selector) {
       let that = this
-      that.res = []
       let parms = { id: id, ver: '1.0', platform: 1 }
       if (browser.versions().IosApp || browser.versions().AndroidApp) {
         SetAppData({
@@ -242,13 +211,14 @@ export default {
     }
   },
   mounted () {
-    let id = this.IData.Items[0].ContentObj.ContentValue[0].AnchorID
-    let type = this.IData.Items[0].ContentObj.ContentValue[0].GroupType
-    if (type === 0) {
-      this.GetModule(id, 0)
-    } else {
-      this.GetProductList(id, 0)
-    }
+    let data = this.IData.Items[0].ContentObj.ContentValue
+    data.forEach((value, i) => {
+      if (value.GroupType === 0) {
+        this.GetModule(value.AnchorID, i)
+      } else {
+        this.GetProductList(value.AnchorID, i)
+      }
+    })
   },
   props: ['IData']
 }
@@ -284,7 +254,6 @@ export default {
 .tab{
   height:2rem;
   line-height:2rem;
-  display:flex;
   background: #fff;
   overflow-x: auto;
   // span{
@@ -308,5 +277,8 @@ export default {
   }
   .flex4{
     width: 25%;
+  }
+  .flex5{
+    width: 20%;
   }
 </style>

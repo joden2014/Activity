@@ -113,6 +113,7 @@ window.CallBackCouponDataForJump = (res) => {
   })
   promise.then((res) => {
     AppData = StringToJson(res)
+    Gologin(AppData.ErrorCode)
     if (AppData.Success) {
       tools.msg({
         text: '领取成功',
@@ -252,11 +253,35 @@ const jumpToPage = (type, value) => {
   window.location.href = Url
 }
 
-const Gologin = () => {
+const Gologin = (code) => {
+  if (code) {
+    if (code === '-001' || code === -1) {
+      if (browser.versions().IosApp) {
+        if (!userInfo.user_userid) {
+          GoAppLogin()
+        }
+      } else if (browser.versions().AndroidApp) {
+        if (!userInfo[0].user_userid) {
+          GoAppLogin()
+        }
+      } else {
+        if (!userInfo.userId) {
+          var url = window.location.href
+          tools.setLocalStorage('BackUrl', url)
+          window.location.href = '/Login/LoginIndex'
+        }
+      }
+    }
+    return false
+  }
   GetAppUser()
   setTimeout(() => {
-    if (browser.versions().IosApp || browser.versions().AndroidApp) {
-      if (!userInfo.user_userid && !userInfo[0].user_userid) {
+    if (browser.versions().IosApp) {
+      if (!userInfo.user_userid) {
+        GoAppLogin()
+      }
+    } else if (browser.versions().AndroidApp) {
+      if (!userInfo[0].user_userid) {
         GoAppLogin()
       }
     } else {

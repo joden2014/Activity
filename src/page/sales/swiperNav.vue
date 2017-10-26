@@ -1,6 +1,6 @@
 <template>
   <div style="height:44px;">
-  <sticky ref="sticky" :offset="0">
+  <sticky ref="sticky" :offset="0" :check-sticky-support="false">
     <div class="swiperBox">
       <swiper :options="swiperOption" class="swiperNav" ref="mySwiper">
         <swiper-slide v-for="(nav,index) in IData.Items[0].ContentObj.ContentValue" class="item" v-bind:class="{flex4:IData.Items[0].ContentObj.ContentValue.length===4,flex3:IData.Items[0].ContentObj.ContentValue.length===3,flex2:IData.Items[0].ContentObj.ContentValue.length===2,flex1:IData.Items[0].ContentObj.ContentValue.length===1,active:active===index}" :key="nav.AnchorID" @click.native="goAnchor('.floor'+nav.AnchorID)" v-bind:style="{backgroundColor:active===index?IData.Items[0].ContentObj.BgColor1:IData.Items[0].ContentObj.BgColor2,color:active===index?IData.Items[0].ContentObj.FontColor1:IData.Items[0].ContentObj.FontColor2 }">
@@ -124,7 +124,7 @@
       word-wrap:break-word;
       font-size: 0.60rem;
       line-height:2rem;
-      padding:0 15px;
+      padding:0 10px;
       span{
         width:100%;
         height:100%;

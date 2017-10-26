@@ -133,18 +133,19 @@ const tools = {
     let number = 1
     if (columns === 1) {
       number = 1
-    } else if (columns === 2 || columns === 4) {
+    } else if (columns === 2) {
       number = 2
+    } else if (columns === 4) {
+      number = 4
     } else {
       number = 3
     }
-    console.log(number)
     return number
   }
 }
 
 const replaceCdn = (url) => {
-  return url.replace('images.qipeilong.cn', 'test.tuhu.org').replace(/https?/, 'https')
+  return url.replace('images.qipeilong.cn', 'images.qipeilong.cn').replace(/https?/, 'https')
 }
 
 const hasClass = (element, csName) => {
