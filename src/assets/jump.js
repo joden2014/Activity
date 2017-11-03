@@ -17,6 +17,12 @@ const GetData = (obj) => {
       data: qs.stringify(data),
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
     }).then((res) => {
+      if (res.data.ErrorCode === '-001' || res.data.ErrorCode === '-002') {
+        var url = window.location.href
+        tools.setLocalStorage('BackUrl', url)
+        window.location.href = '/Login/LoginIndex'
+        return false
+      }
       resolve(res.data)
       tools.loading('close')
       if (showMsg) {

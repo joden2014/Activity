@@ -80,7 +80,7 @@
 	        		<div class="ProductBtn">
 
 	        			<button @click="operation(5,{'UserProductId':product.ProductType==1?product.PromotionId:product.UserProductId, 'ProductType': product.ProductType})" v-if="product.States==0">马上抢</button>
-						<button v-else-if="product.States==3" style="background:#a9a7a7;">活动未开始</button>
+						<button v-else-if="product.States==3" style="background:#a9a7a7;">{{product.StatesStr}}</button>
 	        			<button v-else style="background:#a9a7a7;">已售罄</button>
 
 	        		</div>
